@@ -1,7 +1,7 @@
 # Projeto Amape
  Projeto de Extensão UFMS - Construção de Software 
 
-Desenvolvimento de um Sistema para uma Associação de Moradores
+Desenvolvimento de um Sistema de Cadastro e Gerenciamento de Atividades para uma Associação de Moradores
 
 **Navegação no Repositório**
 

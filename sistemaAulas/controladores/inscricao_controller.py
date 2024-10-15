@@ -5,8 +5,8 @@ class InscricaoController:
     def __init__(self, db_path):
         self.dao = InscricaoDAO(db_path)
 
-    def adicionar_inscricao(self, morador_cpf, aula_codigo):
-        inscricao = Inscricao(morador_cpf, aula_codigo)
+    def adicionar_inscricao(self, morador_cpf, aula_codigo, status, matricula):
+        inscricao = Inscricao(morador_cpf, aula_codigo, status, matricula)
         self.dao.adicionar_inscricao(inscricao)
 
     def remover_inscricao(self, morador_cpf, aula_codigo):

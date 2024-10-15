@@ -36,13 +36,21 @@ def criar_banco_de_dados(db_path):
         # Criar tabela de moradores
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS moradores (
-                cpf TEXT PRIMARY KEY,
-                nome_completo TEXT,
-                data_nascimento TEXT,
-                endereco TEXT,
-                telefone TEXT,
-                email TEXT,
-                data_cadastro TEXT
+                matricula TEXT PRIMARY KEY,
+              cpf TEXT,
+              nome_completo TEXT,
+              filiacao TEXT,
+              data_nascimento TEXT,
+              endereco TEXT,
+              telefone TEXT,
+              email TEXT,
+              tipo TEXT,
+              responsavel_nome TEXT,
+              responsavel_cpf TEXT,
+              documento_permissao TEXT,
+              profissao TEXT,
+              tipo_necessidade TEXT,
+              grau_necessidade TEXT
             )
         ''')
         
@@ -62,11 +70,11 @@ def criar_banco_de_dados(db_path):
         # Criar tabela de inscrições
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS inscricoes (
-                morador_cpf TEXT,
-                aula_codigo TEXT,
-                PRIMARY KEY(morador_cpf, aula_codigo),
-                FOREIGN KEY(morador_cpf) REFERENCES moradores(cpf),
-                FOREIGN KEY(aula_codigo) REFERENCES aulas(codigo)
+                matricula TEXT,
+            aula_codigo TEXT,
+            PRIMARY KEY(matricula, aula_codigo),
+            FOREIGN KEY(matricula) REFERENCES alunos(matricula),
+            FOREIGN KEY(aula_codigo) REFERENCES aulas(codigo)
             )
         ''')
         

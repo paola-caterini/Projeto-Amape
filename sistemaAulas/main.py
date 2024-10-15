@@ -1,4 +1,6 @@
 from config import DB_PATH
+#import shutil
+#import os
 from controladores.admin_controller import AdminController
 from sistemaAulas.interface.login import LOGIN
 
@@ -27,7 +29,7 @@ def main():
         # Menu de opções
         print("\nSelecione a operação que deseja testar:")
         print("1. Adicionar Professor")
-        print("2. Adicionar Aluno (Morador)")
+        print("2. Fazer Inscrição do Aluno")
         print("3. Listar Professores")
         print("4. Listar Alunos (Moradores)")
         print("5. Adicionar Inscrição de Aluno")
@@ -59,28 +61,95 @@ def main():
                 print("Professor adicionado com sucesso!")
             except PermissionError as e:
                 print(e)
-
+#################################
         elif opcao == '2':
-            cpf = input("Digite o CPF do aluno: ")
-            nome_completo = input("Digite o nome completo do aluno: ")
-            data_nascimento = input("Digite a data de nascimento do aluno (YYYY-MM-DD): ")
-            endereco = input("Digite o endereço do aluno: ")
-            telefone = input("Digite o telefone do aluno: ")
-            email = input("Digite o email do aluno: ")
+            tipo = input("Digite o tipo de morador (MenorDeIdade, MaiorDeIdade, PortadorDeNecessidadesEspeciais): ")
+            cpf = input("Digite o CPF do morador: ")
+            nome_completo = input("Digite o nome completo do morador: ")
+            filiacao = input("Digite a filiação do morador: ")
+            data_nascimento = input("Digite a data de nascimento do morador (YYYY-MM-DD): ")
+            endereco = input("Digite o endereço do morador: ")
+            telefone = input("Digite o telefone do morador: ")
+            email = input("Digite o email do morador: ")
+            aula_codigo = input("Digite o código da aula: ")
+            status = input("Digite o status da inscrição: ")
 
             try:
-                admin_controller.morador_controller.adicionar_morador(
-                    cpf=cpf,
-                    nome_completo=nome_completo,
-                    data_nascimento=data_nascimento,
-                    endereco=endereco,
-                    telefone=telefone,
-                    email=email
-                )
-                print("Aluno adicionado com sucesso!")
-            except PermissionError as e:
-                print(e)
+                if tipo == 'MenorDeIdade':
+                    responsavel = input("Digite o nome do responsável: ")
+                    escola = input("Digite o nome da escola: ")
+                    documento_permissao = input("Digite o caminho do documento de permissão (ex: /Users/seu_usuario/Documentos/nome_do_arquivo.pdf): ")
+                    #caminho_arquivo = input("Digite o caminho do documento de permissão /caminho/para/seu/projeto/documentos_permissao/nome_do_arquivo.pdf: ")
+                    
+                    # Diretório onde os arquivos serão salvos
+                    #diretorio_destino = "documentos_permissao"
+                    #if not os.path.exists(diretorio_destino):
+                        #os.makedirs(diretorio_destino)
+                    
+                    # Nome do arquivo no diretório de destino
+                    #nome_arquivo = os.path.basename(caminho_arquivo)
+                    #caminho_destino = os.path.join(diretorio_destino, nome_arquivo)
+                    
+                    # Copiar o arquivo para o diretório de destino
+                    #shutil.copy(caminho_arquivo, caminho_destino)
 
+                    admin_controller.adicionar_morador_e_inscricao(
+                        tipo=tipo,
+                            cpf=cpf,
+                            nome_completo=nome_completo,
+                            filiacao=filiacao,
+                            data_nascimento=data_nascimento,
+                            endereco=endereco,
+                            telefone=telefone,
+                            email=email,
+                            aula_codigo=aula_codigo,
+                            status=status,
+                            responsavel=responsavel,
+                            escola=escola,
+                            documento_permissao=documento_permissao
+                        )
+                elif tipo == 'MaiorDeIdade':
+                    profissao = input("Digite a profissão: ")
+                    admin_controller.adicionar_morador_e_inscricao(
+                        tipo=tipo,
+                            cpf=cpf,
+                            nome_completo=nome_completo,
+                            filiacao=filiacao,
+                            data_nascimento=data_nascimento,
+                            endereco=endereco,
+                            telefone=telefone,
+                            email=email,
+                            aula_codigo=aula_codigo,
+                            status=status,
+                            profissao=profissao
+                        )
+                elif tipo == 'PortadorDeNecessidadesEspeciais':
+                    tipo_necessidade = input("Digite o tipo de necessidade especial: ")
+                    grau_necessidade = input("Digite o grau de necessidade especial: ")
+                    admin_controller.adicionar_morador_e_inscricao(
+                        tipo=tipo,
+                            cpf=cpf,
+                            nome_completo=nome_completo,
+                            filiacao=filiacao,
+                            data_nascimento=data_nascimento,
+                            endereco=endereco,
+                            telefone=telefone,
+                            email=email,
+                            aula_codigo=aula_codigo,
+                            status=status,
+                            tipo_necessidade=tipo_necessidade,
+                            grau_necessidade=grau_necessidade
+                        )
+                else:
+                    print("Tipo de morador inválido.")
+                    continue
+
+                print("Morador e inscrição adicionado com sucesso!")
+            except PermissionError as e:
+                print(f"Erro de permissão: {e}")
+            except Exception as e:
+                print(f"Erro ao adicionar morador: {e}")
+###################################
         elif opcao == '3':
             try:
                 professores = admin_controller.listar_professores()

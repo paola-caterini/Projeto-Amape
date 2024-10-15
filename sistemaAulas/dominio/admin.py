@@ -5,7 +5,7 @@ from sistemaAulas.dominio.morador import Morador
 from datetime import datetime
 
 class Admin:
-    def __init__(self, cpf, nome_completo, data_nascimento, endereco, telefone, email, nome_usuario, senha, data_cadastro):
+    def __init__(self, cpf, nome_completo, data_nascimento, endereco, telefone, email, nome_usuario, senha, data_cadastro=None):
         self.cpf = cpf
         self.nome_completo = nome_completo
         self.data_nascimento = data_nascimento

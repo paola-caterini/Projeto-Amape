@@ -91,18 +91,26 @@ class AdminController:
             raise PermissionError("Acesso negado. Admin não autenticado.")
 
     # Métodos para delegar operações CRUD para inscrições
-    def adicionar_inscricao_aluno(self, *args, **kwargs):
+
+
+    def adicionar_morador_e_inscricao(self, tipo, cpf, nome_completo, filiacao, data_nascimento, endereco, telefone, email, aula_codigo, status, **kwargs):
         if self.verificar_autenticacao():
-            self.inscricao_controller.adicionar_inscricao(*args, **kwargs)
+            matricula = self.morador_controller.gerar_matricula()
+            self.morador_controller.adicionar_morador(
+                tipo=tipo,
+                cpf=cpf,
+                nome_completo=nome_completo,
+                filiacao=filiacao,
+                data_nascimento=data_nascimento,
+                endereco=endereco,
+                telefone=telefone,
+                email=email,
+                matricula=matricula,
+                **kwargs
+            )
+            self.inscricao_controller.adicionar_inscricao(cpf, aula_codigo, status, matricula)
         else:
             raise PermissionError("Acesso negado. Admin não autenticado.")
-
-    def remover_inscricao_aluno(self, *args, **kwargs):
-        if self.verificar_autenticacao():
-            self.inscricao_controller.remover_inscricao(*args, **kwargs)
-        else:
-            raise PermissionError("Acesso negado. Admin não autenticado.")
-
     def buscar_inscricao_por_morador(self, *args, **kwargs):
         if self.verificar_autenticacao():
             return self.inscricao_controller.buscar_inscricao_por_morador(*args, **kwargs)

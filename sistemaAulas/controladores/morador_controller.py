@@ -1,9 +1,9 @@
 # controladores/morador_controller.py
-from persistencia.morador_dao import MoradorDAO
-from dominio.morador import Morador
-from dominio.menor_de_idade import MenorDeIdade
-from dominio.maior_de_idade import MaiorDeIdade
-from dominio.portador_de_necessidades_especiais import PortadorDeNecessidadesEspeciais
+from sistemaAulas.persistencia.morador_dao import MoradorDAO
+from sistemaAulas.dominio.morador import Morador
+from sistemaAulas.dominio.menor_de_idade import MenorDeIdade
+from sistemaAulas.dominio.maior_de_idade import MaiorDeIdade
+from sistemaAulas.dominio.portador_de_necessidades_especiais import PortadorDeNecessidadesEspeciais
 
 class MoradorController:
     def __init__(self, db_path):

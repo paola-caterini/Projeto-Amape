@@ -1,5 +1,5 @@
-from persistencia.aula_dao import AulaDAO
-from dominio.aula import Aula
+from sistemaAulas.persistencia.aula_dao import AulaDAO
+from sistemaAulas.dominio.aula import Aula
 
 class AulaController:
     def __init__(self, db_path):

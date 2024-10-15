@@ -1,9 +1,9 @@
-from dominio.admin import Admin
-from persistencia.admin_dao import AdminDAO
-from controladores.professor_controller import ProfessorController
-from controladores.morador_controller import MoradorController
-from controladores.aula_controller import AulaController
-from controladores.inscricao_controller import InscricaoController
+#from dominio.admin import Admin
+from sistemaAulas.persistencia.admin_dao import AdminDAO
+from sistemaAulas.controladores.professor_controller import ProfessorController
+from sistemaAulas.controladores.morador_controller import MoradorController
+from sistemaAulas.controladores.aula_controller import AulaController
+from sistemaAulas.controladores.inscricao_controller import InscricaoController
 
 class AdminController:
     def __init__(self, db_path):

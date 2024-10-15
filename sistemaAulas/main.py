@@ -1,7 +1,10 @@
 from config import DB_PATH
 from controladores.admin_controller import AdminController
+from sistemaAulas.interface.login import LOGIN
 
 def main():
+
+
     # Inicializar o controlador principal com o caminho do banco de dados
     admin_controller = AdminController(DB_PATH)
 
@@ -136,4 +139,5 @@ def main():
             print("Opção inválida.")
 
 if __name__ == "__main__":
+    LOGIN.Application()
     main()

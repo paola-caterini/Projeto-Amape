@@ -1,9 +1,9 @@
 # persistencia/morador_dao.py
 import sqlite3
-from dominio.morador import Morador
-from dominio.menor_de_idade import MenorDeIdade
-from dominio.maior_de_idade import MaiorDeIdade
-from dominio.portador_de_necessidades_especiais import PortadorDeNecessidadesEspeciais
+from sistemaAulas.dominio.morador import Morador
+from sistemaAulas.dominio.menor_de_idade import MenorDeIdade
+from sistemaAulas.dominio.maior_de_idade import MaiorDeIdade
+from sistemaAulas.dominio.portador_de_necessidades_especiais import PortadorDeNecessidadesEspeciais
 
 class MoradorDAO:
     def __init__(self, db_path):

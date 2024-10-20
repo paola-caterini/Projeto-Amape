@@ -1,5 +1,5 @@
 # dominio/menor_de_idade.py
-from dominio.morador import Morador
+from sistemaAulas.dominio.morador import Morador
 
 class MenorDeIdade(Morador):
     def __init__(self, matricula, cpf, nome_completo, filiacao, data_nascimento, endereco, telefone, email, responsavel_nome, responsavel_cpf, documento_permissao):

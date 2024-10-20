@@ -7,6 +7,7 @@ from controladores.aula_controller import AulaController
 def main():
     # Inicializar o controlador principal com o caminho do banco de dados
     admin_controller = AdminController(DB_PATH)
+    aula_controller = AulaController(DB_PATH)
 
     # Solicitar nome de usuário e senha para autenticação
     nome_usuario = input("Digite o nome de usuário do admin: ")
@@ -23,6 +24,12 @@ def main():
         print("Falha na autenticação do admin.")
         return
 
+    def validar_cpf(cpf):
+        # Verifica se o CPF tem 11 caracteres e se todos são dígitos
+        if len(cpf) == 11 and cpf.isdigit():
+            return True
+        return False
+
     while True:
         # Menu de opções
         print("\nSelecione a operação que deseja testar:")
@@ -35,11 +42,21 @@ def main():
         print("7. Listar Inscrições de Aluno")
         print("8. Criar aula")
         print("9. Sair")
+        print("10. Remover Professor")
 
         opcao = input("Digite o número da operação: ")
 
+
         if opcao == '1':
-            cpf = input("Digite o CPF do professor: ")
+
+            while True:
+                cpf = input("Digite o CPF do professor (11 dígitos): ")
+
+                if validar_cpf(cpf):
+                    break  # Se o CPF for válido, sai do loop
+                else:
+                    print("CPF inválido! Certifique-se de que tenha 11 dígitos numéricos.")
+
             nome_completo = input("Digite o nome completo do professor: ")
             especialidade = input("Digite a especialidade do professor: ")
             data_nascimento = input("Digite a data de nascimento do professor (YYYY-MM-DD): ")
@@ -60,10 +77,32 @@ def main():
                 print("Professor adicionado com sucesso!")
             except PermissionError as e:
                 print(e)
+
+
+        elif opcao == '10':
+            cpf = input("Digite o CPF do professor (11 dígitos): ")
+
+            if validar_cpf(cpf):
+                break  # Se o CPF for válido, sai do loop
+            else:
+                print("CPF inválido! Certifique-se de que tenha 11 dígitos numéricos.")
+
+            try:
+                admin_controller.remover_professor(cpf)
+                print("Professor removido com sucesso!")
+            except ValueError as ve:
+                print(ve)  # Mensagem de erro se nenhum professor foi encontrado
+            except Exception as e:
+                print(f"Erro ao remover professor: {e}")
 #################################
         elif opcao == '2':
             tipo = input("Digite o tipo de morador (MenorDeIdade, MaiorDeIdade, PortadorDeNecessidadesEspeciais): ")
-            cpf = input("Digite o CPF do morador: ")
+            cpf = input("Digite o CPF do professor (11 dígitos): ")
+
+            if validar_cpf(cpf):
+                break  # Se o CPF for válido, sai do loop
+            else:
+                print("CPF inválido! Certifique-se de que tenha 11 dígitos numéricos.")
             nome_completo = input("Digite o nome completo do morador: ")
             filiacao = input("Digite a filiação do morador: ")
             data_nascimento = input("Digite a data de nascimento do morador (YYYY-MM-DD): ")

@@ -1,7 +1,7 @@
 # dominio/admin.py
-from sistemaAulas.dominio.inscricao import Inscricao
-from sistemaAulas.dominio.aula import Aula
-from sistemaAulas.dominio.morador import Morador
+from dominio.inscricao import Inscricao
+from dominio.aula import Aula
+from dominio.morador import Morador
 from datetime import datetime
 
 class Admin:

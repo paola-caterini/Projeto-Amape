@@ -1,6 +1,6 @@
 import sqlite3
 from datetime import datetime
-from sistemaAulas.dominio.admin import Admin
+from dominio.admin import Admin
 
 class AdminDAO:
     def __init__(self, db_path):

@@ -1,12 +1,10 @@
 from config import DB_PATH
-#import shutil
-#import os
+
+from controladores import aula_controller
 from controladores.admin_controller import AdminController
-from sistemaAulas.interface.login import LOGIN
+from controladores.aula_controller import AulaController
 
 def main():
-
-
     # Inicializar o controlador principal com o caminho do banco de dados
     admin_controller = AdminController(DB_PATH)
 
@@ -35,7 +33,8 @@ def main():
         print("5. Adicionar Inscrição de Aluno")
         print("6. Remover Inscrição de Aluno")
         print("7. Listar Inscrições de Aluno")
-        print("8. Sair")
+        print("8. Criar aula")
+        print("9. Sair")
 
         opcao = input("Digite o número da operação: ")
 
@@ -93,7 +92,7 @@ def main():
                     # Copiar o arquivo para o diretório de destino
                     #shutil.copy(caminho_arquivo, caminho_destino)
 
-                    admin_controller.adicionar_morador_e_inscricao(
+                    nome, matricula = admin_controller.adicionar_morador_e_inscricao(
                         tipo=tipo,
                             cpf=cpf,
                             nome_completo=nome_completo,
@@ -110,7 +109,7 @@ def main():
                         )
                 elif tipo == 'MaiorDeIdade':
                     profissao = input("Digite a profissão: ")
-                    admin_controller.adicionar_morador_e_inscricao(
+                    nome, matricula=admin_controller.adicionar_morador_e_inscricao(
                         tipo=tipo,
                             cpf=cpf,
                             nome_completo=nome_completo,
@@ -126,7 +125,7 @@ def main():
                 elif tipo == 'PortadorDeNecessidadesEspeciais':
                     tipo_necessidade = input("Digite o tipo de necessidade especial: ")
                     grau_necessidade = input("Digite o grau de necessidade especial: ")
-                    admin_controller.adicionar_morador_e_inscricao(
+                    nome, matricula = admin_controller.adicionar_morador_e_inscricaoadmin_controller.adicionar_morador_e_inscricao(
                         tipo=tipo,
                             cpf=cpf,
                             nome_completo=nome_completo,
@@ -144,7 +143,7 @@ def main():
                     print("Tipo de morador inválido.")
                     continue
 
-                print("Morador e inscrição adicionado com sucesso!")
+                print(f"Morador {nome_completo} e inscrição adicionados com sucesso! Matrícula: {matricula}")
             except PermissionError as e:
                 print(f"Erro de permissão: {e}")
             except Exception as e:
@@ -201,6 +200,20 @@ def main():
                 print(e)
 
         elif opcao == '8':
+                id = input("Digite o ID da aula: ")
+                nome = input("Digite o nome da aula: ")
+                descricao = input("Digite a descrição da aula: ")
+                professor_responsavel = input("Digite o CPF do professor responsável: ")
+                dias_semana = input("Digite os dias da semana (ex: Segunda, Quarta): ")
+                horario_inicio = input("Digite o horário de início (ex: 08:00): ")
+                horario_termino = input("Digite o horário de término (ex: 10:00): ")
+                local = input("Digite o local da aula: ")
+                numero_vagas = int(input("Digite o número de vagas: "))
+
+                aula_controller.adicionar_aula(id, nome, descricao, professor_responsavel, dias_semana, horario_inicio, horario_termino, local, numero_vagas)
+                print("Aula criada com sucesso!")
+
+        elif opcao == '9':
             print("Saindo...")
             break
 
@@ -208,5 +221,4 @@ def main():
             print("Opção inválida.")
 
 if __name__ == "__main__":
-    LOGIN.Application()
     main()

@@ -1,16 +1,16 @@
-from sistemaAulas.persistencia.inscricao_dao import InscricaoDAO
-from sistemaAulas.dominio.inscricao import Inscricao
+from dominio.inscricao import Inscricao
+from persistencia.inscricao_dao import InscricaoDAO
 
 class InscricaoController:
     def __init__(self, db_path):
-        self.dao = InscricaoDAO(db_path)
+        self.inscricao_dao = InscricaoDAO(db_path)
 
-    def adicionar_inscricao(self, morador_cpf, aula_codigo, status, matricula):
-        inscricao = Inscricao(morador_cpf, aula_codigo, status, matricula)
-        self.dao.adicionar_inscricao(inscricao)
+    def adicionar_inscricao(self, morador_cpf, aula_codigo, status, matricula, data_inscricao=None):
+        inscricao = Inscricao( morador_cpf, aula_codigo, status,matricula, data_inscricao)
+        self.inscricao_dao.adicionar_inscricao(inscricao)
 
-    def remover_inscricao(self, morador_cpf, aula_codigo):
-        self.dao.remover_inscricao(morador_cpf, aula_codigo)
+    def remover_inscricao(self, matricula, morador_cpf, aula_codigo):
+        self.inscricao_dao.remover_inscricao(matricula, morador_cpf, aula_codigo)
 
     def listar_inscricoes(self):
         return self.dao.listar_inscricoes()

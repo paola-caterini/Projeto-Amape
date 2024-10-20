@@ -1,5 +1,5 @@
 import sqlite3
-from sistemaAulas.dominio.professor import Professor
+from dominio.professor import Professor
 
 class ProfessorDAO:
     def __init__(self, db_path):

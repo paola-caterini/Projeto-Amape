@@ -1,5 +1,5 @@
-from sistemaAulas.persistencia.professor_dao import ProfessorDAO
-from sistemaAulas.dominio.professor import Professor
+from persistencia.professor_dao import ProfessorDAO
+from dominio.professor import Professor
 
 class ProfessorController:
     def __init__(self, db_path):

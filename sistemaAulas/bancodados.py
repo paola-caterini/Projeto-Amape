@@ -57,24 +57,28 @@ def criar_banco_de_dados(db_path):
         # Criar tabela de aulas
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS aulas (
-                codigo TEXT PRIMARY KEY,
-                nome TEXT,
+                id TEXT PRIMARY KEY,
+                nome TEXT NOT NULL,
                 descricao TEXT,
-                data TEXT,
-                horario TEXT,
-                professor_cpf TEXT,
-                FOREIGN KEY(professor_cpf) REFERENCES professores(cpf)
+                professor_responsavel TEXT,
+                dias_semana TEXT,
+                horario_inicio TEXT,
+                horario_termino TEXT,
+                local TEXT,
+                numero_vagas INTEGER
             )
         ''')
         
         # Criar tabela de inscrições
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS inscricoes (
-                matricula TEXT,
-            aula_codigo TEXT,
-            PRIMARY KEY(matricula, aula_codigo),
-            FOREIGN KEY(matricula) REFERENCES alunos(matricula),
-            FOREIGN KEY(aula_codigo) REFERENCES aulas(codigo)
+                
+                morador_cpf TEXT,
+                aula_codigo TEXT,
+                status TEXT,
+                matricula TEXT,       
+                data_inscricao TEXT,
+                PRIMARY KEY (matricula, morador_cpf, aula_codigo)
             )
         ''')
         

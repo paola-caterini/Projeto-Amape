@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 class InscricaoDAO:
     def __init__(self, db_path):
@@ -10,9 +11,12 @@ class InscricaoDAO:
             cursor = conn.cursor()
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS inscricoes (
+                    matricula TEXT,
                     morador_cpf TEXT,
                     aula_codigo TEXT,
-                    PRIMARY KEY (morador_cpf, aula_codigo)
+                    status TEXT,
+                    data_inscricao TEXT,
+                    PRIMARY KEY (matricula, morador_cpf, aula_codigo)
                 )
             ''')
             conn.commit()
@@ -22,26 +26,27 @@ class InscricaoDAO:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
-                INSERT INTO inscricoes (morador_cpf, aula_codigo)
-                VALUES (?, ?)
-            ''', (inscricao.morador_cpf, inscricao.aula_codigo))
+                INSERT INTO inscricoes ( morador_cpf, aula_codigo, status, matricula, data_inscricao)
+                VALUES (?, ?, ?, ?, ?)
+            ''', ( inscricao.morador_cpf, inscricao.aula_codigo, inscricao.status, inscricao.matricula, inscricao.data_inscricao))
             conn.commit()
 
-    def remover_inscricao(self, morador_cpf, aula_codigo):
-        from dominio.inscricao import Inscricao  # Importação local para evitar ciclo
+    def remover_inscricao(self, matricula, morador_cpf, aula_codigo):
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
                 DELETE FROM inscricoes
-                WHERE morador_cpf = ? AND aula_codigo = ?
-            ''', (morador_cpf, aula_codigo))
+                WHERE matricula = ? AND morador_cpf = ? AND aula_codigo = ?
+            ''', (matricula, morador_cpf, aula_codigo))
             conn.commit()
 
     def listar_inscricoes(self):
         from dominio.inscricao import Inscricao  # Importação local para evitar ciclo
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
-            cursor.execute('SELECT morador_cpf, aula_codigo FROM inscricoes')
-            rows = cursor.fetchall()
-            inscricoes = [Inscricao(morador_cpf=row[0], aula_codigo=row[1]) for row in rows]
-            return inscricoes
+            cursor.execute('''
+                SELECT matricula, morador_cpf, aula_codigo, status, data_inscricao
+                FROM inscricoes
+            ''')
+            inscricoes = cursor.fetchall()
+            return [Inscricao(matricula, morador_cpf, aula_codigo, status, data_inscricao) for matricula, morador_cpf, aula_codigo, status, data_inscricao in inscricoes]

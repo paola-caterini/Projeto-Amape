@@ -1,9 +1,9 @@
-#from dominio.admin import Admin
-from sistemaAulas.persistencia.admin_dao import AdminDAO
-from sistemaAulas.controladores.professor_controller import ProfessorController
-from sistemaAulas.controladores.morador_controller import MoradorController
-from sistemaAulas.controladores.aula_controller import AulaController
-from sistemaAulas.controladores.inscricao_controller import InscricaoController
+from dominio.admin import Admin
+from persistencia.admin_dao import AdminDAO
+from controladores.professor_controller import ProfessorController
+from controladores.morador_controller import MoradorController
+from controladores.aula_controller import AulaController
+from controladores.inscricao_controller import InscricaoController
 
 class AdminController:
     def __init__(self, db_path):
@@ -96,6 +96,7 @@ class AdminController:
     def adicionar_morador_e_inscricao(self, tipo, cpf, nome_completo, filiacao, data_nascimento, endereco, telefone, email, aula_codigo, status, **kwargs):
         if self.verificar_autenticacao():
             matricula = self.morador_controller.gerar_matricula()
+            # Adicionar o morador
             self.morador_controller.adicionar_morador(
                 tipo=tipo,
                 cpf=cpf,
@@ -108,7 +109,14 @@ class AdminController:
                 matricula=matricula,
                 **kwargs
             )
-            self.inscricao_controller.adicionar_inscricao(cpf, aula_codigo, status, matricula)
+            # Adicionar a inscrição
+            self.inscricao_controller.adicionar_inscricao(
+                morador_cpf=cpf,
+                aula_codigo=aula_codigo,
+                status=status,
+                matricula=matricula
+            )
+            return nome_completo, matricula
         else:
             raise PermissionError("Acesso negado. Admin não autenticado.")
     def buscar_inscricao_por_morador(self, *args, **kwargs):

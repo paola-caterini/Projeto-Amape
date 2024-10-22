@@ -1,5 +1,6 @@
 from config import DB_PATH
 
+
 from controladores import aula_controller
 from controladores.admin_controller import AdminController
 from controladores.aula_controller import AulaController
@@ -210,7 +211,15 @@ def main():
                 local = input("Digite o local da aula: ")
                 numero_vagas = int(input("Digite o número de vagas: "))
 
-                aula_controller.adicionar_aula(id, nome, descricao, professor_responsavel, dias_semana, horario_inicio, horario_termino, local, numero_vagas)
+                admin_controller.adicionar_aula(id, 
+                                               nome, 
+                                               descricao, 
+                                               professor_responsavel, 
+                                               dias_semana, 
+                                               horario_inicio, 
+                                               horario_termino, 
+                                               local, 
+                                               numero_vagas)
                 print("Aula criada com sucesso!")
 
         elif opcao == '9':

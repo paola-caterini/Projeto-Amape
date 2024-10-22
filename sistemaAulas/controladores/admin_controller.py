@@ -60,11 +60,8 @@ class AdminController:
             raise PermissionError("Acesso negado. Admin não autenticado.")
 
     # Métodos para delegar operações CRUD para aulas
-    def adicionar_aula(self, *args, **kwargs):
-        if self.verificar_autenticacao():
-            self.aula_controller.adicionar_aula(*args, **kwargs)
-        else:
-            raise PermissionError("Acesso negado. Admin não autenticado.")
+    def adicionar_aula(self, id, nome, descricao, professor_responsavel, dias_semana, horario_inicio, horario_termino, local, numero_vagas):
+        self.aula_controller.adicionar_aula(id, nome, descricao, professor_responsavel, dias_semana, horario_inicio, horario_termino, local, numero_vagas)
 
     def atualizar_aula(self, *args, **kwargs):
         if self.verificar_autenticacao():

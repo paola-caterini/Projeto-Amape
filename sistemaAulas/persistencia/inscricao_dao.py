@@ -45,8 +45,8 @@ class InscricaoDAO:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             cursor.execute('''
-                SELECT matricula, morador_cpf, aula_codigo, status, data_inscricao
+                SELECT morador_cpf, matricula, aula_codigo, status, data_inscricao
                 FROM inscricoes
             ''')
             inscricoes = cursor.fetchall()
-            return [Inscricao(matricula, morador_cpf, aula_codigo, status, data_inscricao) for matricula, morador_cpf, aula_codigo, status, data_inscricao in inscricoes]
+            return [Inscricao(morador_cpf, matricula, aula_codigo, status, data_inscricao) for morador_cpf, matricula, aula_codigo, status, data_inscricao in inscricoes]

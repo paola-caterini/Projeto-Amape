@@ -127,3 +127,10 @@ class AdminController:
             return self.inscricao_controller.buscar_inscricao_por_aula(*args, **kwargs)
         else:
             raise PermissionError("Acesso negado. Admin não autenticado.")
+
+#metodo para listagem de relatorios
+    def listar_inscricoes_aluno(self):
+        if self.verificar_autenticacao():  # Garante que o admin está autenticado
+            return self.inscricao_controller.listar_inscricoes()
+        else:
+            raise PermissionError("Acesso negado. Admin não autenticado.")

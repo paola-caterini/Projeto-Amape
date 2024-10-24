@@ -4,10 +4,17 @@ from config import DB_PATH
 from controladores import aula_controller
 from controladores.admin_controller import AdminController
 from controladores.aula_controller import AulaController
+from controladores.inscricao_controller import InscricaoController
 
 def main():
     # Inicializar o controlador principal com o caminho do banco de dados
     admin_controller = AdminController(DB_PATH)
+
+    # Inicializar o controlador de inscrições
+    inscricao_controller = InscricaoController(DB_PATH)  # Adicione esta linha
+
+    # Associar o controlador de inscrições ao controlador de admin
+    admin_controller.inscricao_controller = inscricao_controller
 
     # Solicitar nome de usuário e senha para autenticação
     nome_usuario = input("Digite o nome de usuário do admin: ")

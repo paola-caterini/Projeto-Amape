@@ -13,10 +13,10 @@ class InscricaoController:
         self.inscricao_dao.remover_inscricao(matricula, morador_cpf, aula_codigo)
 
     def listar_inscricoes(self):
-        return self.dao.listar_inscricoes()
+        return self.inscricao_dao.listar_inscricoes()
 
     def buscar_inscricao_por_morador(self, morador_cpf):
-        return self.dao.buscar_inscricao_por_morador(morador_cpf)
+        return self.inscricao_dao.buscar_inscricao_por_morador(morador_cpf)
 
     def buscar_inscricao_por_aula(self, aula_codigo):
-        return self.dao.buscar_inscricao_por_aula(aula_codigo)
+        return self.inscricao_dao.buscar_inscricao_por_aula(aula_codigo)

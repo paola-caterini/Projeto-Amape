@@ -1,6 +1,6 @@
 # persistencia/aula_dao.py
 import sqlite3
-from dominio.aula import Aula
+from sistemaAulas.dominio.aula import Aula
 
 class AulaDAO:
     def __init__(self, db_path):

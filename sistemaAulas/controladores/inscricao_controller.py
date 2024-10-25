@@ -1,5 +1,5 @@
-from dominio.inscricao import Inscricao
-from persistencia.inscricao_dao import InscricaoDAO
+from sistemaAulas.dominio.inscricao import Inscricao
+from sistemaAulas.persistencia.inscricao_dao import InscricaoDAO
 
 class InscricaoController:
     def __init__(self, db_path):

@@ -1,5 +1,5 @@
 # dominio/portador_de_necessidades_especiais.py
-from dominio.morador import Morador
+from sistemaAulas.dominio.morador import Morador
 
 class PortadorDeNecessidadesEspeciais(Morador):
     def __init__(self, matricula, cpf, nome_completo, filiacao, data_nascimento, endereco, telefone, email, tipo_necessidade, grau_necessidade):

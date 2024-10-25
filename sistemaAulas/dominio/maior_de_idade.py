@@ -1,5 +1,5 @@
 # dominio/maior_de_idade.py
-from dominio.morador import Morador
+from sistemaAulas.dominio.morador import Morador
 
 class MaiorDeIdade(Morador):
     def __init__(self, matricula, cpf, nome_completo, filiacao, data_nascimento, endereco, telefone, email, profissao):

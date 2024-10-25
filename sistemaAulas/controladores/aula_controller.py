@@ -1,6 +1,6 @@
 # controladores/aula_controller.py
-from dominio.aula import Aula
-from persistencia.aula_dao import AulaDAO
+from sistemaAulas.dominio.aula import Aula
+from sistemaAulas.persistencia.aula_dao import AulaDAO
 
 class AulaController:
     def __init__(self, db_path):

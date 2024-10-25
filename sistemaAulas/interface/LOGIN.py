@@ -4,6 +4,11 @@ from tkinter import *
 from tkinter import ttk, messagebox
 import base64
 
+from click import command
+
+from sistemaAulas.config import DB_PATH
+from sistemaAulas.controladores.admin_controller import AdminController
+
 #from sistemaAulas.config import DB_PATH
 #from sistemaAulas.controladores.admin_controller import AdminController
 #from  sistemaAulas import main
@@ -32,34 +37,50 @@ class Cores_imagens():
     img_Refresh = PhotoImage(file='bt_Refresh.png')
     img_Printer = PhotoImage(file='bt_Printer.png')
     img_Search = PhotoImage(file='bt_Search.png')
+    img_Moradores = PhotoImage(file='bt_Moradores.png')
+    img_Professores = PhotoImage(file='bt_Professores.png')
+    img_Usuarios = PhotoImage(file='bt_usuarios.png')
+
     
 
 class Funçao(Cores_imagens):
 
+
+    def conecta_bd(self):
+        self.conn = sqlite3.connect("../sistema_aulas.db")
+        self.cursor = self.conn.cursor();
+        print("Conectando ao banco de dados")
+
+
+    def desconecta_bd(self):
+        self.conn.close();
+        print("Desconectando ao banco de dados")
+
+
+
+    #########tela home##########
     def bt_FrameLogin_entrar(self):
         #messagebox.showinfo("Sucesso", "Login bem-sucedido!")
 
         self.frameTela_Login.destroy()
 
         self.telaHome()
-
-
-
-        '''nome_usuario=self.usuario_entry.get()
+        '''
+        nome_usuario=self.usuario_entry.get()
         senha=self.senha_entry.get()
         admin_controller = AdminController(DB_PATH)
         # Autenticar um administrador
         if admin_controller.autenticar_admin(nome_usuario, senha):
             print("Admin autenticado com sucesso!")
-            messagebox.showinfo("Sucesso", "Login bem-sucedido!")
+            #messagebox.showinfo("Sucesso", "Login bem-sucedido!")
 
+            self.frameTela_Login.destroy()
 
-            exit(1)
+            self.telaHome()
+
         else:
             print("Falha na autenticação do admin.")
             messagebox.showerror("Erro", "Nome de usuário ou senha incorretos.")
-            #main.main()
-            exit(0)
         '''
 
     def bt_frameLogin_esqueceu(self):
@@ -108,56 +129,49 @@ class Funçao(Cores_imagens):
         self.frameTela_Home.destroy()
 
         self.telaUsuarios()
-        self.select_lista_usuarios()
+
+
+#########fim tela home##############
 
 
 
+#########tela Usuarios#################################
 
+    def bt_FrameUsuario_Usuario(self):
+        self.frameTela_Usuarios.destroy()
+        self.telaUsuarios()
 
+    def bt_FrameUsuario_Moradores(self):
+        self.frameTela_Usuarios.destroy()
+        self.telaMoradores()
 
-###############################################################################################33
+    def bt_FrameUsuario_professores(self):
+        self.frameTela_Usuarios.destroy()
+        self.telaProfessores()
 
-    def limpa_cliente(self):
+    def limpa_usuarios(self):
         self.codigo_entry.delete(0, END)
         self.cidade_entry.delete(0, END)
         self.fone_entry.delete(0, END)
         self.nome_entry.delete(0, END)
-    def conecta_bd(self):
-        self.conn = sqlite3.connect("../sistema_aulas.db")
-        self.cursor = self.conn.cursor(); print("Conectando ao banco de dados")
-    def desconecta_bd(self):
-        self.conn.close(); print("Desconectando ao banco de dados")
-    '''def montaTabelas(self):
-        self.conecta_bd()
-        ### Criar tabela
-        self.cursor.execute("""
-            CREATE TABLE IF NOT EXISTS clientes (
-                cod INTEGER PRIMARY KEY,
-                nome_cliente CHAR(40) NOT NULL,
-                telefone INTEGER(20),
-                cidade CHAR(40)               
-            );
-        """)
-        self.conn.commit(); print("Banco de dados criado")
-        self.desconecta_bd()
-    '''
-    def variaveis(self):
+
+    def variaveis_usuarios(self):
         self.codigo = self.codigo_entry.get()
         self.nome = self.nome_entry.get()
         self.fone = self.fone_entry.get()
         self.cidade = self.cidade_entry.get()
-    def OnDoubleClick(self, event):
-        self.limpa_cliente()
-        self.listaCli.selection()
+    def OnDoubleClick_usuarios(self, event):
+        #self.limpa_usuarios()
+        self.listaUsuarios.selection()
 
-        for n in self.listaCli.selection():
+        for n in self.listaUsuarios.selection():
             col1, col2, col3, col4 = self.listaCli.item(n, 'values')
             self.codigo_entry.insert(END, col1)
             self.nome_entry.insert(END, col2)
             self.fone_entry.insert(END, col3)
             self.cidade_entry.insert(END, col4)
 
-    def add_cliente(self):
+    def add_usuarios(self):
         self.variaveis()
         self.conecta_bd()
 
@@ -167,7 +181,7 @@ class Funçao(Cores_imagens):
         self.desconecta_bd()
         self.select_lista()
         self.limpa_cliente()
-    def altera_cliente(self):
+    def altera_usuarios(self):
         self.variaveis()
         self.conecta_bd()
         self.cursor.execute(""" UPDATE clientes SET nome_cliente = ?, telefone = ?, cidade = ?
@@ -177,7 +191,7 @@ class Funçao(Cores_imagens):
         self.desconecta_bd()
         self.select_lista()
         self.limpa_cliente()
-    def deleta_cliente(self):
+    def deleta_usuarios(self):
         self.variaveis()
         self.conecta_bd()
         self.cursor.execute("""DELETE FROM clientes WHERE cod = ? """, (self.codigo))
@@ -186,30 +200,185 @@ class Funçao(Cores_imagens):
         self.limpa_cliente()
         self.select_lista()
 
-    def select_lista_usuarios(self):
-        self.listaCli.delete(*self.listaCli.get_children())
+    def lista_usuarios(self,):
+        self.listaUsuarios.delete(*self.listaUsuarios.get_children())
         self.conecta_bd()
         lista = self.cursor.execute(""" SELECT cpf, nome_completo, data_nascimento, endereco, telefone, email, nome_usuario, senha, data_cadastro FROM administradores
             ORDER BY nome_completo ASC; """)
         for i in lista:
-            self.listaCli.insert("", END, values=i)
+            self.listaUsuarios.insert("", END, values=i)
         self.desconecta_bd()
-    def busca_Usuario(self):
+    def busca_Usuarios(self):
         self.conecta_bd()
-        self.listaCli.delete(*self.listaCli.get_children())
+        self.listaUsuarios.delete(*self.listaUsuarios.get_children())
 
-        self.entry_tab_usuario.insert(END, '%')
-        nome = self.entry_tab_usuario.get()
+        self.entry_Tab_usuario .insert(END, '%')
+        nome =  self.entry_Tab_usuario .get()
+        print(nome)
         self.cursor.execute(
             """  SELECT cpf, nome_completo, data_nascimento, endereco, telefone, email, nome_usuario, senha, data_cadastro FROM administradores
-            WHERE nome_cliente LIKE '%s' ORDER BY nome_completo ASC""" % nome)
-        buscanomeCli = self.cursor.fetchall()
-        for i in buscanomeCli:
-            self.listaCli.insert("", END, values=i)
-        #self.limpa_cliente()
+            WHERE nome_completo LIKE '%s' ORDER BY nome_completo ASC""" % nome)
+        buscanome = self.cursor.fetchall()
+        for i in buscanome:
+            self.listaUsuarios.insert("", END, values=i)
+        #self.limpa_usuarios()
         self.desconecta_bd()
-    def images_base64(self):
-        self.btnovo_base64 = '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'
+
+
+###############tela Moradores###################
+    def limpa_moradores(self):
+        self.codigo_entry.delete(0, END)
+        self.cidade_entry.delete(0, END)
+        self.fone_entry.delete(0, END)
+        self.nome_entry.delete(0, END)
+
+    def variaveis_moradores(self):
+        self.codigo = self.codigo_entry.get()
+        self.nome = self.nome_entry.get()
+        self.fone = self.fone_entry.get()
+        self.cidade = self.cidade_entry.get()
+    def OnDoubleClick_moradores(self, event):
+        #self.limpa_usuarios()
+        self.listaMoradores.selection()
+
+        for n in self.listaMoradores.selection():
+            col1, col2, col3, col4 = self.listaCli.item(n, 'values')
+            self.codigo_entry.insert(END, col1)
+            self.nome_entry.insert(END, col2)
+            self.fone_entry.insert(END, col3)
+            self.cidade_entry.insert(END, col4)
+
+    def add_moradores(self):
+        self.variaveis()
+        self.conecta_bd()
+
+        self.cursor.execute(""" INSERT INTO clientes (nome_cliente, telefone, cidade)
+            VALUES (?, ?, ?)""", (self.nome, self.fone, self.cidade))
+        self.conn.commit()
+        self.desconecta_bd()
+        self.select_lista()
+        self.limpa_cliente()
+    def altera_moradores(self):
+        self.variaveis()
+        self.conecta_bd()
+        self.cursor.execute(""" UPDATE clientes SET nome_cliente = ?, telefone = ?, cidade = ?
+            WHERE cod = ? """,
+                            (self.nome, self.fone, self.cidade, self.codigo))
+        self.conn.commit()
+        self.desconecta_bd()
+        self.select_lista()
+        self.limpa_cliente()
+    def deleta_moradores(self):
+        self.variaveis()
+        self.conecta_bd()
+        self.cursor.execute("""DELETE FROM clientes WHERE cod = ? """, (self.codigo))
+        self.conn.commit()
+        self.desconecta_bd()
+        self.limpa_cliente()
+        self.select_lista()
+
+    def lista_moradores(self,):
+        self.listaMoradores.delete(*self.listaMoradores.get_children())
+        self.conecta_bd()
+        lista = self.cursor.execute(""" SELECT matricula, cpf, nome_completo, filiacao, data_nascimento, endereco, telefone, email, tipo, responsavel_nome, responsavel_cpf, documento_permissao, profissao, tipo_necessidade, grau_necessidade
+            FROM moradores
+            ORDER BY nome_completo ASC; """)
+        for i in lista:
+            self.listaMoradores.insert("", END, values=i)
+        self.desconecta_bd()
+    def busca_moradores(self):
+        self.conecta_bd()
+        self.listaMoradores.delete(*self.listaMoradores.get_children())
+
+        self.entry_Tab_moradores .insert(END, '%')
+        nome =  self.entry_Tab_moradores .get()
+        print(nome)
+        self.cursor.execute(
+            """  SELECT matricula, cpf, nome_completo, filiacao, data_nascimento, endereco, telefone, email, tipo, responsavel_nome, responsavel_cpf, documento_permissao, profissao, tipo_necessidade, grau_necessidade
+            FROM moradores
+            WHERE nome_completo LIKE '%s' ORDER BY nome_completo ASC""" % nome)
+        buscanome = self.cursor.fetchall()
+        for i in buscanome:
+            self.listaMoradores.insert("", END, values=i)
+        #self.limpa_usuarios()
+        self.desconecta_bd()
+
+
+##########tela professores#########
+    def limpa_professores(self):
+        self.codigo_entry.delete(0, END)
+        self.cidade_entry.delete(0, END)
+        self.fone_entry.delete(0, END)
+        self.nome_entry.delete(0, END)
+
+    def variaveis_professores(self):
+        self.codigo = self.codigo_entry.get()
+        self.nome = self.nome_entry.get()
+        self.fone = self.fone_entry.get()
+        self.cidade = self.cidade_entry.get()
+    def OnDoubleClick_professores(self, event):
+        #self.limpa_usuarios()
+        self.listaProfessores.selection()
+
+        for n in self.listaProfessores.selection():
+            col1, col2, col3, col4 = self.listaProfessores.item(n, 'values')
+            self.codigo_entry.insert(END, col1)
+            self.nome_entry.insert(END, col2)
+            self.fone_entry.insert(END, col3)
+            self.cidade_entry.insert(END, col4)
+
+    def add_professores(self):
+        self.variaveis()
+        self.conecta_bd()
+
+        self.cursor.execute(""" INSERT INTO clientes (nome_cliente, telefone, cidade)
+            VALUES (?, ?, ?)""", (self.nome, self.fone, self.cidade))
+        self.conn.commit()
+        self.desconecta_bd()
+        self.select_lista()
+        self.limpa_cliente()
+    def altera_professores(self):
+        self.variaveis()
+        self.conecta_bd()
+        self.cursor.execute(""" UPDATE clientes SET nome_cliente = ?, telefone = ?, cidade = ?
+            WHERE cod = ? """,
+                            (self.nome, self.fone, self.cidade, self.codigo))
+        self.conn.commit()
+        self.desconecta_bd()
+        self.select_lista()
+        self.limpa_cliente()
+    def deleta_professores(self):
+        self.variaveis()
+        self.conecta_bd()
+        self.cursor.execute("""DELETE FROM clientes WHERE cod = ? """, (self.codigo))
+        self.conn.commit()
+        self.desconecta_bd()
+        self.limpa_cliente()
+        self.select_lista()
+
+    def lista_professores(self,):
+        self.listaProfessores.delete(*self.listaProfessores.get_children())
+        self.conecta_bd()
+        lista = self.cursor.execute(""" SELECT cpf, nome_completo, especialidade, data_nascimento, endereco, telefone, email, data_cadastro FROM professores
+            ORDER BY nome_completo ASC; """)
+        for i in lista:
+            self.listaProfessores.insert("", END, values=i)
+        self.desconecta_bd()
+    def busca_professores(self):
+        self.conecta_bd()
+        self.listaProfessores.delete(*self.listaProfessores.get_children())
+
+        self.entry_Tab_professores .insert(END, '%')
+        nome =  self.entry_Tab_professores .get()
+        print(nome)
+        self.cursor.execute(
+            """  SELECT cpf, nome_completo, especialidade, data_nascimento, endereco, telefone, email, data_cadastro FROM professores
+            WHERE nome_completo LIKE '%s' ORDER BY nome_completo ASC""" % nome)
+        buscanome = self.cursor.fetchall()
+        for i in buscanome:
+            self.listaProfessores.insert("", END, values=i)
+        #self.limpa_usuarios()
+        self.desconecta_bd()
 
 
 ######################################################################################
@@ -323,14 +492,14 @@ class Telas(Funçao):
         self.bt_Home = Button(self.frameTela_Usuarios,image=self.img_Home, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0)
         self.bt_Home.place(relx= 0, rely=0, relwidth=0.09, relheight= 0.2)
 
-        self.bt_Cadastro = Button(self.frameTela_Usuarios,image=self.img_cadastro, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0)
-        #self.bt_Cadastro.place(relx= 0.1, rely=0, relwidth=0.2, relheight= 0.2)
+        self.bt_Moradores = Button(self.frameTela_Usuarios,image=self.img_Moradores, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_FrameUsuario_Moradores)
+        self.bt_Moradores.place(relx= 0.1, rely=0, relwidth=0.2, relheight= 0.2)
 
-        self.bt_Aulas = Button(self.frameTela_Usuarios,image=self.img_Aulas, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0)
-        #self.bt_Aulas.place(relx= 0.31, rely=0, relwidth=0.2, relheight= 0.2)
+        self.bt_Professores = Button(self.frameTela_Usuarios,image=self.img_Professores, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_FrameUsuario_professores)
+        self.bt_Professores.place(relx= 0.31, rely=0, relwidth=0.2, relheight= 0.2)
         
-        self.bt_Relatorios = Button(self.frameTela_Usuarios,image=self.img_Relatorios, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0)
-        #self.bt_Relatorios.place(relx= 0.52, rely=0, relwidth=0.2, relheight= 0.2)
+        self.bt_Usuarios = Button(self.frameTela_Usuarios,image=self.img_Usuarios, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_FrameUsuario_Usuario)
+        self.bt_Usuarios.place(relx= 0.52, rely=0, relwidth=0.2, relheight= 0.2)
 
         self.bt_Sol = Button(self.frameTela_Usuarios,image=self.img_Sol, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_frameHome_sol)
         self.bt_Sol.place(relx= 0.73, rely=0, relwidth=0.09, relheight= 0.2)
@@ -356,13 +525,13 @@ class Telas(Funçao):
         self.bt_Lixeira = Button(self.frameTela_Usuarios,image=self.img_Lixeira,bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0)
         self.bt_Lixeira.place(relx= 0.18, rely=0.26, relwidth=0.06, relheight= 0.09)
 
-        self.bt_Refresh = Button(self.frameTela_Usuarios,image=self.img_Refresh,bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0)
+        self.bt_Refresh = Button(self.frameTela_Usuarios,image=self.img_Refresh,bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_FrameUsuario_Usuario)
         self.bt_Refresh.place(relx= 0.26, rely=0.26, relwidth=0.06, relheight= 0.09)
 
         self.bt_Printer = Button(self.frameTela_Usuarios,image=self.img_Printer,bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0)
         self.bt_Printer.place(relx= 0.34, rely=0.26, relwidth=0.06, relheight= 0.09)
 
-        self.bt_Search = Button(self.frameTela_Usuarios,image=self.img_Search,highlightthickness=0,border=0,command=self.busca_Usuario)
+        self.bt_Search = Button(self.frameTela_Usuarios,image=self.img_Search,highlightthickness=0,border=0,command=self.busca_Usuarios)
         self.bt_Search.place(relx= 0.9, rely=0.26, relwidth=0.06, relheight= 0.09)
 
         self.entry_Tab_usuario = Entry(self.frameTela_Usuarios,highlightthickness=0,border=0,font = ('verdana', 28, 'bold'),fg=self.cor_texto_pesquisa)
@@ -374,29 +543,29 @@ class Telas(Funçao):
         self.frame_2 = Frame(self.frameTela_Usuarios, bd=4, bg='grey')
         self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
 
-        self.listaCli = ttk.Treeview(self.frame_2, height=3,column=("col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8","col9"))
+        self.listaUsuarios = ttk.Treeview(self.frame_2, height=3,column=("col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8","col9"))
 
-        self.listaCli.heading("#0", text="")
-        self.listaCli.heading("#1", text="CPF")
-        self.listaCli.heading("#2", text="Nome")
-        self.listaCli.heading("#3", text="Data Nascimento")
-        self.listaCli.heading("#4", text="Endereço")
-        self.listaCli.heading("#5", text="Telefone")
-        self.listaCli.heading("#6", text="Email")
-        self.listaCli.heading("#7", text="Nome Usuario")
-        self.listaCli.heading("#8", text="Senha")
-        self.listaCli.heading("#9",text="Data Cadastro")
-        self.listaCli.column("#0", width=0)
-        self.listaCli.column("#1", width=125)
-        self.listaCli.column("#2", width=200)
-        self.listaCli.column("#3", width=150)
-        self.listaCli.column("#4", width=200)
-        self.listaCli.column("#5", width=125)
-        self.listaCli.column("#6", width=200)
-        self.listaCli.column("#7", width=125)
-        self.listaCli.column("#8", width=125)
-        self.listaCli.column("#9", width=200)
-        self.listaCli.place(relx=0, rely=0, relwidth=0.98, relheight=0.95)
+        self.listaUsuarios.heading("#0", text="")
+        self.listaUsuarios.heading("#1", text="CPF")
+        self.listaUsuarios.heading("#2", text="Nome")
+        self.listaUsuarios.heading("#3", text="Data Nascimento")
+        self.listaUsuarios.heading("#4", text="Endereço")
+        self.listaUsuarios.heading("#5", text="Telefone")
+        self.listaUsuarios.heading("#6", text="Email")
+        self.listaUsuarios.heading("#7", text="Nome Usuario")
+        self.listaUsuarios.heading("#8", text="Senha")
+        self.listaUsuarios.heading("#9",text="Data Cadastro")
+        self.listaUsuarios.column("#0", width=0)
+        self.listaUsuarios.column("#1", width=125)
+        self.listaUsuarios.column("#2", width=200)
+        self.listaUsuarios.column("#3", width=150)
+        self.listaUsuarios.column("#4", width=200)
+        self.listaUsuarios.column("#5", width=125)
+        self.listaUsuarios.column("#6", width=200)
+        self.listaUsuarios.column("#7", width=125)
+        self.listaUsuarios.column("#8", width=125)
+        self.listaUsuarios.column("#9", width=200)
+        self.listaUsuarios.place(relx=0, rely=0, relwidth=0.98, relheight=0.95)
 
         self.scroolLista = Scrollbar(self.frame_2, orient='vertical')        
         self.scroolLista.place(relx=0.98, rely=0, relwidth=0.02, relheight=1)
@@ -404,11 +573,11 @@ class Telas(Funçao):
         self.scroolLista2 = Scrollbar(self.frame_2, orient='horizontal',relief="solid")
         self.scroolLista2.place(relx=0, rely=0.95, relwidth=0.98, relheight=0.05)
 
-        self.listaCli.configure(xscrollcommand=self.scroolLista2.set,yscrollcommand=self.scroolLista.set)
-        self.scroolLista.config(command=self.listaCli.yview)
-        self.scroolLista2.config(command=self.listaCli.xview)
+        self.listaUsuarios.configure(xscrollcommand=self.scroolLista2.set,yscrollcommand=self.scroolLista.set)
+        self.scroolLista.config(command=self.listaUsuarios.yview)
+        self.scroolLista2.config(command=self.listaUsuarios.xview)
 
-        self.listaCli.bind("<Double-1>", self.OnDoubleClick)
+        self.listaUsuarios.bind("<Double-1>", self.OnDoubleClick_usuarios(self))
 
 
         #stylo tabela
@@ -416,13 +585,517 @@ class Telas(Funçao):
         style=ttk.Style()
         style.theme_use('default')
         style.configure("Treeview",background='grey',foreground=self.cor_texto_titulo,rowheight=25,fieldbackground=self.corFundo)
-        style.map(self.listaCli,"Treeview", background=[('select','red')])
-        
+        style.map(self.listaUsuarios,"Treeview", background=[('select','red')])
+
+        self.lista_usuarios()
+
               
         #-------------------------------------------------------------------------------------------------------------------------------------
 
+    def telaMoradores(self):
+        self.frameTela_Moradores = Frame(self.root, bg=self.corFundo)  # 0D1521
+        self.frameTela_Moradores.place(relheight=1, relwidth=1)
+        # --------------------------------------------------------------------------------------------------------------------------------------------
+        # botoes superior
+
+        self.bt_Home = Button(self.frameTela_Moradores, image=self.img_Home, bg=self.corFundo,
+                          activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Home.place(relx=0, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Moradores = Button(self.frameTela_Moradores, image=self.img_Moradores, bg=self.corFundo,
+                               activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Moradores.place(relx=0.1, rely=0, relwidth=0.2, relheight=0.2)
+
+        self.bt_Professores = Button(self.frameTela_Moradores, image=self.img_Professores, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Professores.place(relx=0.31, rely=0, relwidth=0.2, relheight=0.2)
+
+        self.bt_Usuarios = Button(self.frameTela_Moradores, image=self.img_Usuarios, bg=self.corFundo,
+                              activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Usuarios.place(relx=0.52, rely=0, relwidth=0.2, relheight=0.2)
+
+        self.bt_Sol = Button(self.frameTela_Moradores, image=self.img_Sol, bg=self.corFundo, activebackground=self.corFundo,
+                         highlightthickness=0, border=0, command=self.bt_frameHome_sol)
+        self.bt_Sol.place(relx=0.73, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Avatar = Button(self.frameTela_Moradores, image=self.img_avatar, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Avatar.place(relx=0.82, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Sair = Button(self.frameTela_Moradores, image=self.img_log_out, bg=self.corFundo,
+                          activebackground=self.corFundo, highlightthickness=0, border=0,
+                          command=self.bt_frameUsuarios_sair)
+        self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.label_TabelaMoradores = Label(self.frameTela_Moradores, text="Tabela Moradores", font=('arial', 28, 'bold'),
+                                      fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_TabelaMoradores.place(relx=0.35, rely=0.2, relwidth=0.32, relheight=0.06)
+
+    # --------------------------------------------------------------------------------------------------------------------------------------------
+    # botoes da tabela
+
+        self.bt_UserAdd = Button(self.frameTela_Moradores, image=self.img_UserAdd, bg=self.corFundo,
+                             activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_UserAdd.place(relx=0.02, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Edit = Button(self.frameTela_Moradores, image=self.img_Edit, bg=self.corFundo,
+                          activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Edit.place(relx=0.1, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Lixeira = Button(self.frameTela_Moradores, image=self.img_Lixeira, bg=self.corFundo,
+                             activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Lixeira.place(relx=0.18, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Refresh = Button(self.frameTela_Moradores, image=self.img_Refresh, bg=self.corFundo,
+                             activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Refresh.place(relx=0.26, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Printer = Button(self.frameTela_Moradores, image=self.img_Printer, bg=self.corFundo,
+                             activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Printer.place(relx=0.34, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Search = Button(self.frameTela_Moradores, image=self.img_Search, highlightthickness=0, border=0,
+                            command=self.busca_moradores)
+        self.bt_Search.place(relx=0.9, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.entry_Tab_moradores = Entry(self.frameTela_Moradores, highlightthickness=0, border=0,
+                                   font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
+        self.entry_Tab_moradores.place(relx=0.5, rely=0.26, relwidth=0.4, relheight=0.09)
+
+    #########################################################################################
+    # listagem tabela
+
+        self.frame_2 = Frame(self.frameTela_Moradores, bd=4, bg='grey')
+        self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
+
+        self.listaMoradores = ttk.Treeview(self.frame_2, height=3,
+                                 column=( "matricula", "cpf", "nome_completo", "filiacao", "data_nascimento", "endereco", "telefone", "email","tipo", "responsavel_nome", "responsavel_cpf", "documento_permissao", "profissao", "tipo_necessidade", "grau_necessidade"))
+
+        self.listaMoradores.heading("#0", text="")
+        self.listaMoradores.heading("#1", text="Matricula")
+        self.listaMoradores.heading("#2", text="CPF")
+        self.listaMoradores.heading("#3", text="Nome")
+        self.listaMoradores.heading("#4", text="Filiaçao")
+        self.listaMoradores.heading("#5", text="Data Nascimento")
+        self.listaMoradores.heading("#6", text="Endereço")
+        self.listaMoradores.heading("#7", text="Telefone")
+        self.listaMoradores.heading("#8", text="Email")
+        self.listaMoradores.heading("#9", text="Tipo")
+        self.listaMoradores.heading("#10", text="Nome Responsavel")
+        self.listaMoradores.heading("#11", text="CPF Responsavel")
+        self.listaMoradores.heading("#12", text="Documento Permissao")
+        self.listaMoradores.heading("#13", text="Profissao")
+        self.listaMoradores.heading("#14", text="Tipo Necessidade")
+        self.listaMoradores.heading("#15", text="Grau de Necessidade")
+        self.listaMoradores.column("#0", width=0)
+        self.listaMoradores.column("#1", width=200)
+        self.listaMoradores.column("#2", width=150)
+        self.listaMoradores.column("#3", width=200)
+        self.listaMoradores.column("#4", width=200)
+        self.listaMoradores.column("#5", width=150)
+        self.listaMoradores.column("#6", width=200)
+        self.listaMoradores.column("#7", width=200)
+        self.listaMoradores.column("#8", width=200)
+        self.listaMoradores.column("#9", width=200)
+        self.listaMoradores.column("#10", width=200)
+        self.listaMoradores.column("#11", width=200)
+        self.listaMoradores.column("#12", width=200)
+        self.listaMoradores.column("#13", width=200)
+        self.listaMoradores.column("#14", width=200)
+        self.listaMoradores.column("#15", width=200)
+        self.listaMoradores.place(relx=0, rely=0, relwidth=0.98, relheight=0.95)
+
+        self.scroolLista = Scrollbar(self.frame_2, orient='vertical')
+        self.scroolLista.place(relx=0.98, rely=0, relwidth=0.02, relheight=1)
+
+        self.scroolLista2 = Scrollbar(self.frame_2, orient='horizontal', relief="solid")
+        self.scroolLista2.place(relx=0, rely=0.95, relwidth=0.98, relheight=0.05)
+
+        self.listaMoradores.configure(xscrollcommand=self.scroolLista2.set, yscrollcommand=self.scroolLista.set)
+        self.scroolLista.config(command=self.listaMoradores.yview)
+        self.scroolLista2.config(command=self.listaMoradores.xview)
+
+        self.listaMoradores.bind("<Double-1>", self.OnDoubleClick_moradores)
+
+    # stylo tabela
+
+        style = ttk.Style()
+        style.theme_use('default')
+        style.configure("Treeview", background='grey', foreground=self.cor_texto_titulo, rowheight=25,
+                    fieldbackground=self.corFundo)
+        style.map(self.listaMoradores, "Treeview", background=[('select', 'red')])
 
 
+        self.lista_moradores()
+
+        # -------------------------------------------------------------------------------------------------------------------------------------
+
+    def telaProfessores(self):
+        self.frameTela_Professores = Frame(self.root, bg=self.corFundo)  # 0D1521
+        self.frameTela_Professores.place(relheight=1, relwidth=1)
+        # --------------------------------------------------------------------------------------------------------------------------------------------
+        # botoes superior
+
+        self.bt_Home = Button(self.frameTela_Professores, image=self.img_Home, bg=self.corFundo,
+                              activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Home.place(relx=0, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Moradores = Button(self.frameTela_Professores, image=self.img_Moradores, bg=self.corFundo,
+                                   activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Moradores.place(relx=0.1, rely=0, relwidth=0.2, relheight=0.2)
+
+        self.bt_Professores = Button(self.frameTela_Professores, image=self.img_Professores, bg=self.corFundo,
+                                     activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Professores.place(relx=0.31, rely=0, relwidth=0.2, relheight=0.2)
+
+        self.bt_Usuarios = Button(self.frameTela_Professores, image=self.img_Usuarios, bg=self.corFundo,
+                                  activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Usuarios.place(relx=0.52, rely=0, relwidth=0.2, relheight=0.2)
+
+        self.bt_Sol = Button(self.frameTela_Professores, image=self.img_Sol, bg=self.corFundo,
+                             activebackground=self.corFundo, highlightthickness=0, border=0,
+                             command=self.bt_frameHome_sol)
+        self.bt_Sol.place(relx=0.73, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Avatar = Button(self.frameTela_Professores, image=self.img_avatar, bg=self.corFundo,
+                                activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Avatar.place(relx=0.82, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Sair = Button(self.frameTela_Professores, image=self.img_log_out, bg=self.corFundo,
+                              activebackground=self.corFundo, highlightthickness=0, border=0,
+                              command=self.bt_frameUsuarios_sair)
+        self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.label_TabelaProfessores = Label(self.frameTela_Professores, text="Tabela Professores", font=('arial', 28, 'bold'),
+                                          fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_TabelaProfessores.place(relx=0.35, rely=0.2, relwidth=0.35, relheight=0.06)
+
+        # --------------------------------------------------------------------------------------------------------------------------------------------
+        # botoes da tabela
+
+        self.bt_UserAdd = Button(self.frameTela_Professores, image=self.img_UserAdd, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_UserAdd.place(relx=0.02, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Edit = Button(self.frameTela_Professores, image=self.img_Edit, bg=self.corFundo,
+                              activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Edit.place(relx=0.1, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Lixeira = Button(self.frameTela_Professores, image=self.img_Lixeira, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Lixeira.place(relx=0.18, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Refresh = Button(self.frameTela_Professores, image=self.img_Refresh, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Refresh.place(relx=0.26, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Printer = Button(self.frameTela_Professores, image=self.img_Printer, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Printer.place(relx=0.34, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Search = Button(self.frameTela_Professores, image=self.img_Search, highlightthickness=0, border=0,
+                                command=self.busca_professores)
+        self.bt_Search.place(relx=0.9, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.entry_Tab_professores = Entry(self.frameTela_Professores, highlightthickness=0, border=0,
+                                       font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
+        self.entry_Tab_professores.place(relx=0.5, rely=0.26, relwidth=0.4, relheight=0.09)
+
+        #########################################################################################
+        # listagem tabela
+
+        self.frame_2 = Frame(self.frameTela_Professores, bd=4, bg='grey')
+        self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
+
+        self.listaProfessores = ttk.Treeview(self.frame_2, height=3, column=("cpf", "nome_completo", "especialidade", "data_nascimento", "endereco", "telefone", "email", "data_cadastro"))
+
+        self.listaProfessores.heading("#0", text="")
+        self.listaProfessores.heading("#1", text="CPF")
+        self.listaProfessores.heading("#2", text="Nome")
+        self.listaProfessores.heading("#3", text="Especialidade")
+        self.listaProfessores.heading("#4", text="Data Nascimento")
+        self.listaProfessores.heading("#5", text="Endereço")
+        self.listaProfessores.heading("#6", text="Telefone")
+        self.listaProfessores.heading("#7", text="Email")
+        self.listaProfessores.heading("#8", text="Data Cadastro")
+        self.listaProfessores.column("#0", width=0)
+        self.listaProfessores.column("#1", width=150)
+        self.listaProfessores.column("#2", width=200)
+        self.listaProfessores.column("#3", width=200)
+        self.listaProfessores.column("#4", width=200)
+        self.listaProfessores.column("#5", width=200)
+        self.listaProfessores.column("#6", width=200)
+        self.listaProfessores.column("#7", width=200)
+        self.listaProfessores.column("#8", width=200)
+
+        self.listaProfessores.place(relx=0, rely=0, relwidth=0.98, relheight=0.95)
+
+        self.scroolLista = Scrollbar(self.frame_2, orient='vertical')
+        self.scroolLista.place(relx=0.98, rely=0, relwidth=0.02, relheight=1)
+
+        self.scroolLista2 = Scrollbar(self.frame_2, orient='horizontal', relief="solid")
+        self.scroolLista2.place(relx=0, rely=0.95, relwidth=0.98, relheight=0.05)
+
+        self.listaProfessores.configure(xscrollcommand=self.scroolLista2.set, yscrollcommand=self.scroolLista.set)
+        self.scroolLista.config(command=self.listaProfessores.yview)
+        self.scroolLista2.config(command=self.listaProfessores.xview)
+
+        self.listaProfessores.bind("<Double-1>", self.OnDoubleClick_professores)
+
+        # stylo tabela
+
+        style = ttk.Style()
+        style.theme_use('default')
+        style.configure("Treeview", background='grey', foreground=self.cor_texto_titulo, rowheight=25,
+                        fieldbackground=self.corFundo)
+        style.map(self.listaProfessores, "Treeview", background=[('select', 'red')])
+
+        self.lista_professores()
+        # -------------------------------------------------------------------------------------------------------------------------------------
+
+    def telaAulas(self):
+        self.frameTela_Aulas = Frame(self.root, bg=self.corFundo)  # 0D1521
+        self.frameTela_Aulas.place(relheight=1, relwidth=1)
+        # --------------------------------------------------------------------------------------------------------------------------------------------
+        # botoes superior
+
+        self.bt_Home = Button(self.frameTela_Aulas, image=self.img_Home, bg=self.corFundo,
+                              activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Home.place(relx=0, rely=0, relwidth=0.09, relheight=0.2)
+
+
+
+        self.bt_Aulas = Button(self.frameTela_Aulas, image=self.img_Professores, bg=self.corFundo,
+                                     activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Aulas.place(relx=0.31, rely=0, relwidth=0.2, relheight=0.2)
+
+        self.bt_Alunos = Button(self.frameTela_Aulas, image=self.img_Usuarios, bg=self.corFundo,
+                                  activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Alunos.place(relx=0.52, rely=0, relwidth=0.2, relheight=0.2)
+
+        self.bt_Sol = Button(self.frameTela_Aulas, image=self.img_Sol, bg=self.corFundo,
+                             activebackground=self.corFundo, highlightthickness=0, border=0,
+                             command=self.bt_frameHome_sol)
+        self.bt_Sol.place(relx=0.73, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Avatar = Button(self.frameTela_Aulas, image=self.img_avatar, bg=self.corFundo,
+                                activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Avatar.place(relx=0.82, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Sair = Button(self.frameTela_Aulas, image=self.img_log_out, bg=self.corFundo,
+                              activebackground=self.corFundo, highlightthickness=0, border=0,
+                              command=self.bt_frameUsuarios_sair)
+        self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.label_TabelaAulas = Label(self.frameTela_Aulas, text="Tabela Aulas", font=('arial', 28, 'bold'),
+                                          fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_TabelaAulas.place(relx=0.35, rely=0.2, relwidth=0.29, relheight=0.06)
+
+        # --------------------------------------------------------------------------------------------------------------------------------------------
+        # botoes da tabela
+
+        self.bt_UserAdd = Button(self.frameTela_Aulas, image=self.img_UserAdd, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_UserAdd.place(relx=0.02, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Edit = Button(self.frameTela_Aulas, image=self.img_Edit, bg=self.corFundo,
+                              activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Edit.place(relx=0.1, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Lixeira = Button(self.frameTela_Aulas, image=self.img_Lixeira, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Lixeira.place(relx=0.18, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Refresh = Button(self.frameTela_Aulas, image=self.img_Refresh, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Refresh.place(relx=0.26, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Printer = Button(self.frameTela_Aulas, image=self.img_Printer, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Printer.place(relx=0.34, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Search = Button(self.frameTela_Aulas, image=self.img_Search, highlightthickness=0, border=0,
+                                command=self.busca_Usuario)
+        self.bt_Search.place(relx=0.9, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.entry_Tab_aulas = Entry(self.frameTela_Aulas, highlightthickness=0, border=0,
+                                       font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
+        self.entry_Tab_aulas.place(relx=0.5, rely=0.26, relwidth=0.4, relheight=0.09)
+
+        #########################################################################################
+        # listagem tabela
+
+        self.frame_2 = Frame(self.frameTela_Aulas, bd=4, bg='grey')
+        self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
+
+        self.listaAulas = ttk.Treeview(self.frame_2, height=3, column=(
+        "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9"))
+
+        self.listaAulas.heading("#0", text="")
+        self.listaAulas.heading("#1", text="CPF")
+        self.listaAulas.heading("#2", text="Nome")
+        self.listaAulas.heading("#3", text="Data Nascimento")
+        self.listaAulas.heading("#4", text="Endereço")
+        self.listaAulas.heading("#5", text="Telefone")
+        self.listaAulas.heading("#6", text="Email")
+        self.listaAulas.heading("#7", text="Nome Usuario")
+        self.listaAulas.heading("#8", text="Senha")
+        self.listaAulas.heading("#9", text="Data Cadastro")
+        self.listaAulas.column("#0", width=0)
+        self.listaAulas.column("#1", width=125)
+        self.listaAulas.column("#2", width=200)
+        self.listaAulas.column("#3", width=150)
+        self.listaAulas.column("#4", width=200)
+        self.listaAulas.column("#5", width=125)
+        self.listaAulas.column("#6", width=200)
+        self.listaAulas.column("#7", width=125)
+        self.listaAulas.column("#8", width=125)
+        self.listaAulas.column("#9", width=200)
+        self.listaAulas.place(relx=0, rely=0, relwidth=0.98, relheight=0.95)
+
+        self.scroolLista = Scrollbar(self.frame_2, orient='vertical')
+        self.scroolLista.place(relx=0.98, rely=0, relwidth=0.02, relheight=1)
+
+        self.scroolLista2 = Scrollbar(self.frame_2, orient='horizontal', relief="solid")
+        self.scroolLista2.place(relx=0, rely=0.95, relwidth=0.98, relheight=0.05)
+
+        self.listaAulas.configure(xscrollcommand=self.scroolLista2.set, yscrollcommand=self.scroolLista.set)
+        self.scroolLista.config(command=self.listaAulas.yview)
+        self.scroolLista2.config(command=self.listaAulas.xview)
+
+        self.listaAulas.bind("<Double-1>", self.OnDoubleClick)
+
+        # stylo tabela
+
+        style = ttk.Style()
+        style.theme_use('default')
+        style.configure("Treeview", background='grey', foreground=self.cor_texto_titulo, rowheight=25,
+                        fieldbackground=self.corFundo)
+        style.map(self.listaAulas, "Treeview", background=[('select', 'red')])
+
+        # -------------------------------------------------------------------------------------------------------------------------------------
+
+    def telaAlunos(self):
+        self.frameTela_Alunos = Frame(self.root, bg=self.corFundo)  # 0D1521
+        self.frameTela_Alunos.place(relheight=1, relwidth=1)
+        # --------------------------------------------------------------------------------------------------------------------------------------------
+        # botoes superior
+
+        self.bt_Home = Button(self.frameTela_Alunos, image=self.img_Home, bg=self.corFundo,
+                              activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Home.place(relx=0, rely=0, relwidth=0.09, relheight=0.2)
+
+
+
+        self.bt_Aulas = Button(self.frameTela_Alunos, image=self.img_Professores, bg=self.corFundo,
+                                     activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Aulas.place(relx=0.31, rely=0, relwidth=0.2, relheight=0.2)
+
+        self.bt_Alunos = Button(self.frameTela_Alunos, image=self.img_Usuarios, bg=self.corFundo,
+                                  activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Alunos.place(relx=0.52, rely=0, relwidth=0.2, relheight=0.2)
+
+        self.bt_Sol = Button(self.frameTela_Alunos, image=self.img_Sol, bg=self.corFundo,
+                             activebackground=self.corFundo, highlightthickness=0, border=0,
+                             command=self.bt_frameHome_sol)
+        self.bt_Sol.place(relx=0.73, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Avatar = Button(self.frameTela_Alunos, image=self.img_avatar, bg=self.corFundo,
+                                activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Avatar.place(relx=0.82, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Sair = Button(self.frameTela_Alunos, image=self.img_log_out, bg=self.corFundo,
+                              activebackground=self.corFundo, highlightthickness=0, border=0,
+                              command=self.bt_frameUsuarios_sair)
+        self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.label_TabelaAlunos = Label(self.frameTela_Alunos, text="Tabela Alunos", font=('arial', 28, 'bold'),
+                                          fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_TabelaAlunos.place(relx=0.35, rely=0.2, relwidth=0.29, relheight=0.06)
+
+        # --------------------------------------------------------------------------------------------------------------------------------------------
+        # botoes da tabela
+
+        self.bt_UserAdd = Button(self.frameTela_Alunos, image=self.img_UserAdd, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_UserAdd.place(relx=0.02, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Edit = Button(self.frameTela_Alunos, image=self.img_Edit, bg=self.corFundo,
+                              activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Edit.place(relx=0.1, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Lixeira = Button(self.frameTela_Alunos, image=self.img_Lixeira, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Lixeira.place(relx=0.18, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Refresh = Button(self.frameTela_Alunos, image=self.img_Refresh, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Refresh.place(relx=0.26, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Printer = Button(self.frameTela_Alunos, image=self.img_Printer, bg=self.corFundo,
+                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Printer.place(relx=0.34, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.bt_Search = Button(self.frameTela_Alunos, image=self.img_Search, highlightthickness=0, border=0,
+                                command=self.busca_Usuario)
+        self.bt_Search.place(relx=0.9, rely=0.26, relwidth=0.06, relheight=0.09)
+
+        self.entry_Tab_alunos = Entry(self.frameTela_Alunos, highlightthickness=0, border=0,
+                                       font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
+        self.entry_Tab_alunos.place(relx=0.5, rely=0.26, relwidth=0.4, relheight=0.09)
+
+        #########################################################################################
+        # listagem tabela
+
+        self.frame_2 = Frame(self.frameTela_Alunos, bd=4, bg='grey')
+        self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
+
+        self.listaAlunos = ttk.Treeview(self.frame_2, height=3, column=(
+        "col1", "col2", "col3", "col4", "col5", "col6", "col7", "col8", "col9"))
+
+        self.listaAlunos.heading("#0", text="")
+        self.listaAlunos.heading("#1", text="CPF")
+        self.listaAlunos.heading("#2", text="Nome")
+        self.listaAlunos.heading("#3", text="Data Nascimento")
+        self.listaAlunos.heading("#4", text="Endereço")
+        self.listaAlunos.heading("#5", text="Telefone")
+        self.listaAlunos.heading("#6", text="Email")
+        self.listaAlunos.heading("#7", text="Nome Usuario")
+        self.listaAlunos.heading("#8", text="Senha")
+        self.listaAlunos.heading("#9", text="Data Cadastro")
+        self.listaAlunos.column("#0", width=0)
+        self.listaAlunos.column("#1", width=125)
+        self.listaAlunos.column("#2", width=200)
+        self.listaAlunos.column("#3", width=150)
+        self.listaAlunos.column("#4", width=200)
+        self.listaAlunos.column("#5", width=125)
+        self.listaAlunos.column("#6", width=200)
+        self.listaAlunos.column("#7", width=125)
+        self.listaAlunos.column("#8", width=125)
+        self.listaAlunos.column("#9", width=200)
+        self.listaAlunos.place(relx=0, rely=0, relwidth=0.98, relheight=0.95)
+
+        self.scroolLista = Scrollbar(self.frame_2, orient='vertical')
+        self.scroolLista.place(relx=0.98, rely=0, relwidth=0.02, relheight=1)
+
+        self.scroolLista2 = Scrollbar(self.frame_2, orient='horizontal', relief="solid")
+        self.scroolLista2.place(relx=0, rely=0.95, relwidth=0.98, relheight=0.05)
+
+        self.listaAlunos.configure(xscrollcommand=self.scroolLista2.set, yscrollcommand=self.scroolLista.set)
+        self.scroolLista.config(command=self.listaAlunos.yview)
+        self.scroolLista2.config(command=self.listaAlunos.xview)
+
+        self.listaAlunos.bind("<Double-1>", self.OnDoubleClick)
+
+        # stylo tabela
+
+        style = ttk.Style()
+        style.theme_use('default')
+        style.configure("Treeview", background='grey', foreground=self.cor_texto_titulo, rowheight=25,
+                        fieldbackground=self.corFundo)
+        style.map(self.listaAlunos, "Treeview", background=[('select', 'red')])
+
+        # -------------------------------------------------------------------------------------------------------------------------------------
 
 
 Telas()

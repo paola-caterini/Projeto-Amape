@@ -105,10 +105,14 @@ class Funçao(Cores_imagens):
         self.telaHome()
 
     def bt_frameMoradores_salvar(self):
-        self.add_moradores()
-        self.limpa_moradores()
-    
-   
+        if messagebox.askyesno("Confirmação", "Deseja realmente Salvar?"):
+            self.add_moradores()
+            self.limpa_moradores()
+            self.lista_moradores()
+
+
+
+              
 
 
     
@@ -263,6 +267,28 @@ class Funçao(Cores_imagens):
 
 
 ###############tela Moradores###################
+    def bt_frameMoradores_Home(self):
+        self.frameTela_Moradores.destroy()
+        self.telaHome()
+        
+    def bt_frameMoradores_Moradores(self):
+        self.frameTela_Moradores.destroy()
+        self.telaMoradores()
+
+    def bt_frameMoradores_Usuarios(self):
+        self.frameTela_Moradores.destroy()
+        self.telaUsuarios()
+    
+    def bt_frameMoradores_Professores(self):
+        self.frameTela_Moradores.destroy()
+        self.telaProfessores()
+    
+    def bt_frameMoradores_sair(self):
+        self.frameTela_Moradores.destroy()
+        self.telaHome()
+    
+
+
     def bt_frameMoradores_add(self):
         self.frameTela_Moradores.destroy()
         self.telaADD_Moradores()
@@ -333,16 +359,19 @@ class Funçao(Cores_imagens):
             self.grau_necessidade_Moradores_entry.insert(END, grau_necessidade)
      
     def add_moradores(self):
-        self.variaveis_moradores()
-        self.conecta_bd()
+        if messagebox.askyesno("Confirmação", "Deseja realmente Salvar?"):
 
-        self.cursor.execute('''INSERT INTO moradores (matricula, cpf, nome_completo, filiacao, data_nascimento, endereco, telefone, email, tipo, responsavel_nome, responsavel_cpf, documento_permissao, profissao, tipo_necessidade, grau_necessidade)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', (self.matricula_Moradores, self.cpf_Moradores, self.nome_completo_Moradores, self.filiacao_Moradores, self.data_nascimento_Moradores, self.endereco_Moradores, self.telefone_Moradores, self.email_Moradores, self.tipo_Moradores, self.responsavel_nome_Moradores, self.responsavel_cpf_Moradores, self.documento_permissao_Moradores, self.profissao_Moradores, self.tipo_necessidade_Moradores, self.grau_necessidade_Moradores))
-        self.conn.commit()
-        self.desconecta_bd()
-        self.lista_moradores()
-        self.limpa_moradores()
+            self.variaveis_moradores()
+            self.conecta_bd()
 
+            self.cursor.execute('''INSERT INTO moradores (matricula, cpf, nome_completo, filiacao, data_nascimento, endereco, telefone, email, tipo, responsavel_nome, responsavel_cpf, documento_permissao, profissao, tipo_necessidade, grau_necessidade)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', (self.matricula_Moradores, self.cpf_Moradores, self.nome_completo_Moradores, self.filiacao_Moradores, self.data_nascimento_Moradores, self.endereco_Moradores, self.telefone_Moradores, self.email_Moradores, self.tipo_Moradores, self.responsavel_nome_Moradores, self.responsavel_cpf_Moradores, self.documento_permissao_Moradores, self.profissao_Moradores, self.tipo_necessidade_Moradores, self.grau_necessidade_Moradores))
+            self.conn.commit()
+            self.desconecta_bd()
+           
+            self.limpa_moradores()
+            self.lista_moradores()
+            
     def altera_moradores(self):
         self.variaveis_moradores()
         self.conecta_bd()
@@ -367,7 +396,8 @@ class Funçao(Cores_imagens):
         self.lista_moradores()
 
     def lista_moradores(self,):
-        self.listaMoradores.delete(*self.listaMoradores.get_children())
+        if hasattr(self, 'listaMoradores'):
+            self.listaMoradores.delete(*self.listaMoradores.get_children())
         self.conecta_bd()
         lista = self.cursor.execute(""" SELECT matricula, cpf, nome_completo, filiacao, data_nascimento, endereco, telefone, email, tipo, responsavel_nome, responsavel_cpf, documento_permissao, profissao, tipo_necessidade, grau_necessidade
             FROM moradores
@@ -553,10 +583,10 @@ class Telas(Funçao):
         self.bt_Cadastro = Button(self.frameTela_Home,image=self.img_cadastro, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_FrameHome_Cadastro)
         self.bt_Cadastro.place(relx= 0.1, rely=0, relwidth=0.2, relheight= 0.2)
 
-        self.bt_Aulas = Button(self.frameTela_Home,image=self.img_Aulas, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0)
+        self.bt_Aulas = Button(self.frameTela_Home,image=self.img_Aulas, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_FrameHome_Aulas)
         self.bt_Aulas.place(relx= 0.31, rely=0, relwidth=0.2, relheight= 0.2)
         
-        self.bt_Relatorios = Button(self.frameTela_Home,image=self.img_Relatorios, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0)
+        self.bt_Relatorios = Button(self.frameTela_Home,image=self.img_Relatorios, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_FrameHome_Relatorios)
         self.bt_Relatorios.place(relx= 0.52, rely=0, relwidth=0.2, relheight= 0.2)
 
         self.bt_Sol = Button(self.frameTela_Home,image=self.img_Sol, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_frameHome_sol)
@@ -690,19 +720,19 @@ class Telas(Funçao):
         # botoes superior
 
         self.bt_Home = Button(self.frameTela_Moradores, image=self.img_Home, bg=self.corFundo,
-                          activebackground=self.corFundo, highlightthickness=0, border=0)
+                          activebackground=self.corFundo, highlightthickness=0, border=0, command=self.bt_frameMoradores_Home)
         self.bt_Home.place(relx=0, rely=0, relwidth=0.09, relheight=0.2)
 
         self.bt_Moradores = Button(self.frameTela_Moradores, image=self.img_Moradores, bg=self.corFundo,
-                               activebackground=self.corFundo, highlightthickness=0, border=0)
+                               activebackground=self.corFundo, highlightthickness=0, border=0, command=self.bt_frameMoradores_Moradores)
         self.bt_Moradores.place(relx=0.1, rely=0, relwidth=0.2, relheight=0.2)
 
         self.bt_Professores = Button(self.frameTela_Moradores, image=self.img_Professores, bg=self.corFundo,
-                                 activebackground=self.corFundo, highlightthickness=0, border=0)
+                                 activebackground=self.corFundo, highlightthickness=0, border=0, command=self.bt_frameMoradores_Professores)
         self.bt_Professores.place(relx=0.31, rely=0, relwidth=0.2, relheight=0.2)
 
         self.bt_Usuarios = Button(self.frameTela_Moradores, image=self.img_Usuarios, bg=self.corFundo,
-                              activebackground=self.corFundo, highlightthickness=0, border=0)
+                              activebackground=self.corFundo, highlightthickness=0, border=0, command=self.bt_frameMoradores_Usuarios)
         self.bt_Usuarios.place(relx=0.52, rely=0, relwidth=0.2, relheight=0.2)
 
         self.bt_Sol = Button(self.frameTela_Moradores, image=self.img_Sol, bg=self.corFundo, activebackground=self.corFundo,
@@ -715,7 +745,7 @@ class Telas(Funçao):
 
         self.bt_Sair = Button(self.frameTela_Moradores, image=self.img_log_out, bg=self.corFundo,
                           activebackground=self.corFundo, highlightthickness=0, border=0,
-                          command=self.bt_frameUsuarios_sair)
+                          command=self.bt_frameMoradores_sair)
         self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
 
         self.label_TabelaMoradores = Label(self.frameTela_Moradores, text="Tabela Moradores", font=('arial', 28, 'bold'),
@@ -738,7 +768,7 @@ class Telas(Funçao):
         self.bt_Lixeira.place(relx=0.18, rely=0.26, relwidth=0.06, relheight=0.09)
 
         self.bt_Refresh = Button(self.frameTela_Moradores, image=self.img_Refresh, bg=self.corFundo,
-                             activebackground=self.corFundo, highlightthickness=0, border=0)
+                             activebackground=self.corFundo, highlightthickness=0, border=0,command=self.bt_frameMoradores_Moradores)
         self.bt_Refresh.place(relx=0.26, rely=0.26, relwidth=0.06, relheight=0.09)
 
         self.bt_Printer = Button(self.frameTela_Moradores, image=self.img_Printer, bg=self.corFundo,
@@ -1380,15 +1410,15 @@ class Telas(Funçao):
        
         self.label_matricula_Moradores = Label(self.frameTelaADD_Moradores, text="Matricula", font=('arial', 18, 'bold'),anchor='w',
                                              fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_matricula_Moradores.place(relx=0.1, rely=0.26, relwidth=0.1, relheight=0.05)
+        self.label_matricula_Moradores.place(relx=0.1, rely=0.26, relwidth=0.12, relheight=0.05)
 
         self.matricula_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                    font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
-        self.matricula_Moradores_entry.place(relx=0.2, rely=0.26, relwidth=0.2, relheight=0.05)
+        self.matricula_Moradores_entry.place(relx=0.22, rely=0.26, relwidth=0.2, relheight=0.05)
 
         self.label_cpf_Moradores = Label(self.frameTelaADD_Moradores, text="CPF", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_cpf_Moradores.place(relx=0.4, rely=0.26, relwidth=0.1, relheight=0.05)
+        self.label_cpf_Moradores.place(relx=0.43, rely=0.26, relwidth=0.1, relheight=0.05)
 
         self.cpf_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                       font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)     
@@ -1396,107 +1426,107 @@ class Telas(Funçao):
 
         self.label_nome_completo_Moradores = Label(self.frameTelaADD_Moradores, text="Nome Completo", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_nome_completo_Moradores.place(relx=0.1, rely=0.32, relwidth=0.2, relheight=0.05)
+        self.label_nome_completo_Moradores.place(relx=0.1, rely=0.315, relwidth=0.2, relheight=0.05)
 
         self.nome_completo_Moradores_entry = Entry(self.frameTelaADD_Moradores,
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.nome_completo_Moradores_entry.place(relx=0.3, rely=0.32, relwidth=0.4, relheight=0.05)
+        self.nome_completo_Moradores_entry.place(relx=0.3, rely=0.315, relwidth=0.4, relheight=0.05)
 
         self.label_filiacao_Moradores = Label(self.frameTelaADD_Moradores, text="Filiação", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_filiacao_Moradores.place(relx=0.1, rely=0.45, relwidth=0.1, relheight=0.05)
+        self.label_filiacao_Moradores.place(relx=0.1, rely=0.37, relwidth=0.1, relheight=0.05)
 
         self.filiacao_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.filiacao_Moradores_entry.place(relx=0.2, rely=0.45, relwidth=0.5, relheight=0.05)
+        self.filiacao_Moradores_entry.place(relx=0.2, rely=0.37, relwidth=0.5, relheight=0.05)
 
         self.label_data_nascimento_Moradores = Label(self.frameTelaADD_Moradores, text="Data Nascimento", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_data_nascimento_Moradores.place(relx=0.1, rely=0.50, relwidth=0.1, relheight=0.05)
+        self.label_data_nascimento_Moradores.place(relx=0.1, rely=0.425, relwidth=0.2, relheight=0.05)
 
-        self.data_nascimento_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,
+        self.data_nascimento_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.data_nascimento_Moradores_entry.place(relx=0.2, rely=0.50, relwidth=0.5, relheight=0.05)
+        self.data_nascimento_Moradores_entry.place(relx=0.3, rely=0.425, relwidth=0.4, relheight=0.05)
 
         self.label_endereco_Moradores = Label(self.frameTelaADD_Moradores, text="Endereço", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_endereco_Moradores.place(relx=0.1, rely=0.55, relwidth=0.1, relheight=0.05)
+        self.label_endereco_Moradores.place(relx=0.1, rely=0.48, relwidth=0.15, relheight=0.05)
 
-        self.endereco_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,
+        self.endereco_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.endereco_Moradores_entry.place(relx=0.2, rely=0.55, relwidth=0.5, relheight=0.05)
+        self.endereco_Moradores_entry.place(relx=0.25, rely=0.48, relwidth=0.45, relheight=0.05)
 
         self.label_telefone_Moradores = Label(self.frameTelaADD_Moradores, text="Telefone", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_telefone_Moradores.place(relx=0.1, rely=0.6, relwidth=0.1, relheight=0.05)
+        self.label_telefone_Moradores.place(relx=0.1, rely=0.535, relwidth=0.1, relheight=0.05)
 
-        self.telefone_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,
+        self.telefone_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.telefone_Moradores_entry.place(relx=0.2, rely=0.6, relwidth=0.5, relheight=0.05)
+        self.telefone_Moradores_entry.place(relx=0.2, rely=0.535, relwidth=0.5, relheight=0.05)
 
         self.label_email_Moradores = Label(self.frameTelaADD_Moradores, text="Email", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_email_Moradores.place(relx=0.1, rely=0.65, relwidth=0.1, relheight=0.05)
+        self.label_email_Moradores.place(relx=0.1, rely=0.59, relwidth=0.1, relheight=0.05)
 
-        self.email_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,
+        self.email_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.email_Moradores_entry.place(relx=0.2, rely=65, relwidth=0.5, relheight=0.05)
+        self.email_Moradores_entry.place(relx=0.2, rely=0.59, relwidth=0.5, relheight=0.05)
 
         self.label_tipo_Moradores = Label(self.frameTelaADD_Moradores, text="Tipo", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_tipo_Moradores.place(relx=0.1, rely=0.70, relwidth=0.1, relheight=0.05)    
+        self.label_tipo_Moradores.place(relx=0.1, rely=0.645, relwidth=0.1, relheight=0.05)    
 
-        self.tipo_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,  
+        self.tipo_Moradores_entry = Entry(self.frameTelaADD_Moradores,  
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.tipo_Moradores_entry.place(relx=0.2, rely=0.70, relwidth=0.5, relheight=0.05)
+        self.tipo_Moradores_entry.place(relx=0.2, rely=0.645, relwidth=0.5, relheight=0.05)
 
         self.label_responsavel_nome_Moradores = Label(self.frameTelaADD_Moradores, text="Responsavel Nome", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_responsavel_nome_Moradores.place(relx=0.1, rely=0.75, relwidth=0.1, relheight=0.05)
+        self.label_responsavel_nome_Moradores.place(relx=0.1, rely=0.7, relwidth=0.216, relheight=0.05)
 
-        self.responsavel_nome_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,
+        self.responsavel_nome_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.responsavel_nome_Moradores_entry.place(relx=0.2, rely=0.75, relwidth=0.5, relheight=0.05)
+        self.responsavel_nome_Moradores_entry.place(relx=0.316, rely=0.7, relwidth=0.384, relheight=0.05)
 
         self.label_responsavel_cpf_Moradores = Label(self.frameTelaADD_Moradores, text="Responsavel CPF", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_responsavel_cpf_Moradores.place(relx=0.1, rely=0.80, relwidth=0.1, relheight=0.05)
+        self.label_responsavel_cpf_Moradores.place(relx=0.1, rely=0.755, relwidth=0.215, relheight=0.05)
 
-        self.responsavel_cpf_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,
+        self.responsavel_cpf_Moradores_entry = Entry(self.frameTelaADD_Moradores,
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.responsavel_cpf_Moradores_entry.place(relx=0.2, rely=0.80, relwidth=0.5, relheight=0.05)
+        self.responsavel_cpf_Moradores_entry.place(relx=0.315, rely=0.755, relwidth=0.385, relheight=0.05)
 
         self.label_documento_permissao_Moradores = Label(self.frameTelaADD_Moradores, text="Documento Permissão", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_documento_permissao_Moradores.place(relx=0.1, rely=0.85, relwidth=0.1, relheight=0.05)
+        self.label_documento_permissao_Moradores.place(relx=0.1, rely=0.81, relwidth=0.26, relheight=0.05)
 
-        self.documento_permissao_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,
+        self.documento_permissao_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.documento_permissao_Moradores_entry.place(relx=0.2, rely=0.85, relwidth=0.5, relheight=0.05)
+        self.documento_permissao_Moradores_entry.place(relx=0.36, rely=0.81, relwidth=0.34, relheight=0.05)
 
         self.label_profissao_Moradores = Label(self.frameTelaADD_Moradores, text="Profissão", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_profissao_Moradores.place(relx=0.1, rely=0.90, relwidth=0.1, relheight=0.05)
+        self.label_profissao_Moradores.place(relx=0.1, rely=0.865, relwidth=0.11, relheight=0.05)
 
-        self.profissao_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,
+        self.profissao_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.profissao_Moradores_entry.place(relx=0.2, rely=0.90, relwidth=0.5, relheight=0.05)
+        self.profissao_Moradores_entry.place(relx=0.21, rely=0.865, relwidth=0.49, relheight=0.05)
 
         self.label_tipo_necessidade_Moradores = Label(self.frameTelaADD_Moradores, text="Tipo Necessidade", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_tipo_necessidade_Moradores.place(relx=0.1, rely=0.95, relwidth=0.1, relheight=0.05)
+        self.label_tipo_necessidade_Moradores.place(relx=0.1, rely=0.92, relwidth=0.214, relheight=0.05)
 
-        self.tipo_necessidade_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,
+        self.tipo_necessidade_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.tipo_necessidade_Moradores_entry.place(relx=0.2, rely=0.95, relwidth=0.5, relheight=0.05)
+        self.tipo_necessidade_Moradores_entry.place(relx=0.314, rely=0.92, relwidth=0.385, relheight=0.05)
 
         self.label_grau_necessidade_Moradores = Label(self.frameTelaADD_Moradores, text="Grau Necessidade", font=('arial', 18, 'bold'),anchor='w',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_grau_necessidade_Moradores.place(relx=0.1, rely=1, relwidth=0.1, relheight=0.05)
+        self.label_grau_necessidade_Moradores.place(relx=0.1, rely=0.975, relwidth=0.214, relheight=0.05)
 
-        self.grau_necessidade_Moradores_entry = Entry(self.frameTelaADD_Moradores, highlightthickness=0, border=0,
+        self.grau_necessidade_Moradores_entry = Entry(self.frameTelaADD_Moradores,
                                         font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
-        self.grau_necessidade_Moradores_entry.place(relx=0.2, rely=1., relwidth=0.5, relheight=0.05)
+        self.grau_necessidade_Moradores_entry.place(relx=0.314, rely=0.975, relwidth=0.385, relheight=0.05)
 
         #########################################################################################
 

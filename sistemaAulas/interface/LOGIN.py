@@ -841,7 +841,7 @@ class Telas(Funçao):
         self.scroolLista2.config(command=self.listaProfessores.xview)
 
         self.listaProfessores.bind("<Double-1>", self.OnDoubleClick_professores)
-
+        self.lista_professores()
         # stylo tabela
 
         style = ttk.Style()
@@ -850,7 +850,7 @@ class Telas(Funçao):
                         fieldbackground=self.corFundo)
         style.map(self.listaProfessores, "Treeview", background=[('select', 'red')])
 
-        self.lista_professores()
+
         # -------------------------------------------------------------------------------------------------------------------------------------
 
     def telaAulas(self):

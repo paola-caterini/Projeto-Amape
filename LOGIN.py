@@ -1,9 +1,7 @@
 import sqlite3
 from tkinter import *
-
 from tkinter import ttk, messagebox
 import base64
-
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
@@ -20,10 +18,7 @@ from tkinter import filedialog
 
 root = Tk()
 
-
-
 class Funçao():
-
 
     def conecta_bd(self):
         self.conn = sqlite3.connect("sistema_aulas.db")
@@ -36,20 +31,29 @@ class Funçao():
             codigo TEXT)''')
         self.conn.commit()
 
-
     def desconecta_bd(self):
         self.conn.close();
         print("Desconectando ao banco de dados")
-
-    
-
    
-
+   
     #####Temas#######
     def tema_escuro(self):
         self.corFundo='#0D1521'
+        self.corFundo_pesquisa='grey'
+        self.corFundo_tabela='grey'
         self.cor_texto_titulo='white'
         self.cor_texto_pesquisa='white'
+
+        self.fonte_titulo=('Arial', '28', 'bold') #('arial', 28, 'bold')
+       
+        self.fonte_texto_pesquisa=('verdana', '20', 'bold') #('verdana', '20', 'bold')
+
+        self.fonte_label_add_edt=('arial', 18, 'bold')
+
+        self.fonte_label_entry=('verdana', 14, 'bold')
+        
+
+                
         ########################################################################
         self.img_cadastro = PhotoImage(data=base64.b64decode('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'))
         self.img_Aulas = PhotoImage(data=base64.b64decode('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'))
@@ -78,6 +82,19 @@ class Funçao():
         self.corFundo='#7EA8E7'
         self.cor_texto_titulo='black'
         self.cor_texto_pesquisa='black'
+
+       
+        self.corFundo_pesquisa='grey'
+        self.corFundo_tabela='grey'
+       
+
+        self.fonte_titulo=('Arial', '28', 'bold') #('arial', 28, 'bold')
+       
+        self.fonte_texto_pesquisa=('verdana', '20', 'bold') #('verdana', '20', 'bold')
+
+        self.fonte_label_add_edt=('arial', 18, 'bold')
+
+        self.fonte_label_entry=('verdana', 14, 'bold')
         ################################
         self.img_cadastro = PhotoImage(data=base64.b64decode('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'))
         self.img_Aulas = PhotoImage(data=base64.b64decode('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'))
@@ -803,7 +820,7 @@ class Funçao():
         self.data_cadastro_Usuarios = self.data_cadastro_Usuarios_entry.get()
         
     def OnDoubleClick_usuarios(self, event):
-       # self.entry_Tab_usuario.delete(0, END)
+        self.entry_Tab_usuario.delete(0, END)
         self.listaUsuarios.selection()
 
         for n in self.listaUsuarios.selection():
@@ -890,7 +907,7 @@ class Funçao():
             self.listaUsuarios.insert("", END, values=i)
         
         self.desconecta_bd()
-        self.bt_FrameUsuario_Usuario()
+        
 
 ##########tela Add/Edt Usuarios##########
     def bt_FrameADD_Usuarios_Home(self):
@@ -1177,8 +1194,16 @@ class Funçao():
             self.frameTela_Aulas.destroy()
             self.telaEDT_Aulas()
             
+            self.nome_Aulas_entry.insert(END, self.nome_Aulas)
             self.descricao_Aulas_entry.insert(END, self.descricao_Aulas)
-            self.codigo_Aulas_text.insert(END, self.codigo_Aulas)
+            self.professor_Aulas_entry.insert(END, self.professor_responsavel_Aulas)
+            self.dias_semana_Aulas_entry.insert(END, self.dias_semana_Aulas)
+            self.horario_inicio_Aulas_entry.insert(END, self.horario_inicio_Aulas)
+            self.horario_termino_Aulas_entry.insert(END, self.horario_termino_Aulas)
+            self.local_Aulas_entry.insert(END, self.local_Aulas)
+            self.numero_vagas_Aulas_entry.insert(END, self.numero_vagas_Aulas)
+
+
         else:
             messagebox.showinfo("Erro", "Selecione uma aula para editar.")
 
@@ -1266,7 +1291,7 @@ class Funçao():
         print(nome)
         self.cursor.execute(
             """  SELECT id,nome, descricao, professor_responsavel, dias_semana, horario_inicio,horario_termino,local, numero_vagas FROM aulas
-            WHERE descricao LIKE '%s' ORDER BY descricao COLLATE NOCASE ASC""" % nome)
+            WHERE nome LIKE '%s' ORDER BY nome COLLATE NOCASE ASC""" % nome)
         buscanome = self.cursor.fetchall()
         for i in buscanome:
             self.listaAulas.insert("", END, values=i)
@@ -1274,15 +1299,29 @@ class Funçao():
 
     def variaveis_aulas(self):
         try:
+               
+            self.nome_Aulas = self.nome_Aulas_entry.get()
             self.descricao_Aulas = self.descricao_Aulas_entry.get()
-            self.codigo_Aulas = self.codigo_Aulas_text.get(1.0, END)
-            print(self.codigo_Aulas)
+            self.professor_Aulas = self.professor_Aulas_entry.get()
+            self.dias_semana_Aulas = self.dias_semana_Aulas_entry.get()
+            self.horario_inicio_Aulas = self.horario_inicio_Aulas_entry.get()
+            self.horario_termino_Aulas = self.horario_termino_Aulas_entry.get()
+            self.local_Aulas = self.local_Aulas_entry.get()
+            self.numero_vagas_Aulas = self.numero_vagas_Aulas_entry.get()
+            
         except Exception as e:
             messagebox.showinfo("Erro", f"Erro ao inserir dados: {e}")
 
     def limpa_aulas(self):
+        
+        self.nome_Aulas_entry.delete(0, END)
         self.descricao_Aulas_entry.delete(0, END)
-        self.codigo_Aulas_text.delete(1.0, END)
+        self.professor_Aulas_entry.delete(0, END)
+        self.dias_semana_Aulas_entry.delete(0, END)
+        self.horario_inicio_Aulas_entry.delete(0, END)
+        self.horario_termino_Aulas_entry.delete(0, END)
+        self.local_Aulas_entry.delete(0, END)
+        self.numero_vagas_Aulas_entry.delete(0, END)
 
     def add_aulas(self):
         if messagebox.askyesno("Confirmação", "Deseja realmente Salvar?"):
@@ -1298,8 +1337,8 @@ class Funçao():
 
                 idAddAulas = str(int(idAddAulas[0]) + 1)
                       
-            self.cursor.execute('''INSERT INTO aulas (id,descricao,codigo)
-                VALUES (?, ?, ?)''', (idAddAulas,self.descricao_Aulas, self.codigo_Aulas))
+            self.cursor.execute('''INSERT INTO aulas (id,nome, descricao, professor_responsavel, dias_semana, horario_inicio,horario_termino,local, numero_vagas)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)''', (idAddAulas,self.nome_Aulas, self.descricao_Aulas, self.professor_Aulas, self.dias_semana_Aulas, self.horario_inicio_Aulas, self.horario_termino_Aulas, self.local_Aulas, self.numero_vagas_Aulas))
             self.conn.commit()
             self.limpa_aulas()
             self.bt_frameAulas_aulas()
@@ -1312,9 +1351,10 @@ class Funçao():
         self.variaveis_aulas()
         self.conecta_bd()
         try:
-            self.cursor.execute(""" UPDATE aulas SET id = ?, descricao = ?, codigo = ? WHERE id = ? """,
-                            (self.id_Aulas, self.descricao_Aulas, self.codigo_Aulas, self.id_Aulas))
+            self.cursor.execute(""" UPDATE aulas SET id = ?, nome = ?, descricao = ?, professor_responsavel = ?, dias_semana = ?, horario_inicio = ?, horario_termino = ?, local = ?, numero_vagas = ? WHERE id = ? """,
+                            (self.id_Aulas, self.nome_Aulas, self.descricao_Aulas, self.professor_Aulas, self.dias_semana_Aulas, self.horario_inicio_Aulas, self.horario_termino_Aulas, self.local_Aulas, self.numero_vagas_Aulas, self.id_Aulas))
             self.conn.commit()
+
           
             messagebox.showinfo("Sucesso", "Aula alterada com sucesso!")
         
@@ -1419,11 +1459,14 @@ class Funçao():
 
     def bt_frameInscricao_edit(self):
         if not self.entry_Tab_Inscricao.get() == "":
-            self.frameTela_Inscricao.destroy()
+            self.frameTela_Inscricoes.destroy()
             self.telaEDT_Inscricao()
             
-            self.descricao_Inscricao_entry.insert(END, self.descricao_Inscricao)
-            self.codigo_Inscricao_text.insert(END, self.codigo_Inscricao)
+            self.morador_cpf_Inscricao_entry.insert(END, self.morador_cpf_Inscricao)
+            self.aula_codigo_Inscricao_entry.insert(END, self.aula_codigo_Inscricao)
+            self.status_Inscricao_entry.insert(END, self.status_Inscricao)
+            self.data_Inscricao_entry.insert(END, self.data_Inscricao)
+
         else:
             messagebox.showinfo("Erro", "Selecione uma inscrição para editar.")
 
@@ -1470,20 +1513,19 @@ class Funçao():
         self.entry_Tab_Inscricao.delete(0, END)
         self.listaInscricoes.selection()
         for n in self.listaInscricoes.selection():
-            morador_cpf, aula_codigo,status,matricula,data_inscricao= self.listaInscricoes.item(n, 'values')
-            self.id_Inscricao= matricula
+            matricula, morador_cpf, aula_codigo,status,data_inscricao= self.listaInscricoes.item(n, 'values')
+            self.matricula_Inscricao= matricula
             self.morador_cpf_Inscricao= morador_cpf
             self.aula_codigo_Inscricao= aula_codigo
             self.status_Inscricao= status
             self.data_Inscricao= data_inscricao
 
             self.entry_Tab_Inscricao.insert(END, 'matr: '+ matricula)
-            
-
+          
     def lista_inscricao(self,):
         self.listaInscricoes.delete(*self.listaInscricoes.get_children())
         self.conecta_bd()
-        lista = self.cursor.execute(""" SELECT morador_cpf, aula_codigo,status,matricula,data_inscricao FROM inscricoes
+        lista = self.cursor.execute(""" SELECT matricula, morador_cpf, aula_codigo,status,data_inscricao FROM inscricoes
             ORDER BY matricula ASC; """)
         for i in lista:
             self.listaInscricoes.insert("", END, values=i)
@@ -1497,7 +1539,7 @@ class Funçao():
         nome=nome+'%'
         print(nome)
         self.cursor.execute(
-            """  SELECT morador_cpf, aula_codigo,status,matricula,data_inscricao FROM inscricoes
+            """  SELECT matricula, morador_cpf, aula_codigo,status,matricula,data_inscricao FROM inscricoes
             WHERE morador_cpf LIKE '%s' ORDER BY matricula COLLATE NOCASE ASC""" % nome)
         buscanome = self.cursor.fetchall()
         for i in buscanome:
@@ -1505,17 +1547,18 @@ class Funçao():
         self.desconecta_bd()
 
     def variaveis_inscricao(self):
-        self.id_Inscricao = self.matricula_Inscricao_entry.get()
-        self.morador_cpf_Inscricao = self.morador_cpf_Inscricao_entry.get()
-        self.aula_codigo_Inscricao = self.aula_codigo_Inscricao_entry.get()
-        self.status_Inscricao = self.status_Inscricao_entry.get()
-        self.data_Inscricao = self.data_Inscricao_entry.get()
+        try:
+         
+            self.morador_cpf_Inscricao = self.morador_cpf_Inscricao_entry.get()
+            self.aula_codigo_Inscricao = self.aula_codigo_Inscricao_entry.get()
+            self.status_Inscricao = self.status_Inscricao_entry.get()
+            self.data_Inscricao = self.data_Inscricao_entry.get()
 
-
-       
-
+        except Exception as e:
+            messagebox.showinfo("Erro", f"Erro ao inserir dados: {e}")
+                
     def limpa_inscricao(self):
-        self.matricula_Inscricao_entry.delete(0, END)
+        
         self.morador_cpf_Inscricao_entry.delete(0, END)
         self.aula_codigo_Inscricao_entry.delete(0, END)
         self.status_Inscricao_entry.delete(0, END)
@@ -1536,7 +1579,7 @@ class Funçao():
                 idAddInscricao = str(int(idAddInscricao[0]) + 1)
                       
             self.cursor.execute('''INSERT INTO inscricoes (morador_cpf, aula_codigo,status,matricula,data_inscricao)
-                VALUES (?, ?, ?, ?, ?)''', (idAddInscricao,self.descricao_Inscricao, self.codigo_Inscricao))
+                VALUES (?, ?, ?, ?, ?)''', (self.morador_cpf_Inscricao, self.aula_codigo_Inscricao,self.status_Inscricao, idAddInscricao, self.data_Inscricao))
             self.conn.commit()
             self.limpa_inscricao()
             self.bt_frameInscricao_inscricao()
@@ -1554,7 +1597,7 @@ class Funçao():
         self.conecta_bd()
         try:
             self.cursor.execute(""" UPDATE inscricoes SET morador_cpf = ? , aula_codigo = ?,status = ?,data_inscricao = ? WHERE matricula = ? """,
-                            (self.morador_cpf_Inscricao, self.aula_codigo_Inscricao, self.status_Inscricao, self.data_Inscricao, self.id_Inscricao))
+                            (self.morador_cpf_Inscricao, self.aula_codigo_Inscricao, self.status_Inscricao, self.data_Inscricao, self.matricula_Inscricao))
             self.conn.commit()
           
             messagebox.showinfo("Sucesso", "Inscricao alterada com sucesso!")
@@ -1569,10 +1612,10 @@ class Funçao():
 
     def deleta_inscricao(self):
         if not self.entry_Tab_Inscricao.get() == "":
-            if messagebox.askyesno("Confirmação", "Deseja realmente excluir? id: %s" % self.id_Inscricao):
+            if messagebox.askyesno("Confirmação", "Deseja realmente excluir? Matr: %s" % self.matricula_Inscricao):
             
                 self.conecta_bd()
-                self.cursor.execute("""DELETE FROM inscricao WHERE id = ?""", (str(self.id_Inscricao),))
+                self.cursor.execute("""DELETE FROM inscricoes WHERE matricula = ?""", (str(self.matricula_Inscricao),))
                 self.conn.commit()
                 self.desconecta_bd()
 
@@ -1619,14 +1662,16 @@ class Funçao():
             self.frameTelaEDT_Inscricao.destroy()
             self.telaEDT_Inscricao()
 
+        self.morador_cpf_Inscricao_entry.insert(END, self.morador_cpf_Inscricao)
+        self.aula_codigo_Inscricao_entry.insert(END, self.aula_codigo_Inscricao)
+        self.status_Inscricao_entry.insert(END, self.status_Inscricao)
+        self.data_Inscricao_entry.insert(END, self.data_Inscricao)
+
     def bt_frameEDT_Inscricao_sair(self):
         self.frameTelaEDT_Inscricao.destroy()
         self.telaLogin()
 
-
-
-
-    
+   
 
 ######################################################################################
 
@@ -1759,7 +1804,7 @@ class Telas(Funçao):
         self.bt_Sair = Button(self.frameTela_Usuarios,image=self.img_log_out, bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_frameUsuarios_sair)
         self.bt_Sair.place(relx= 0.91, rely=0, relwidth=0.09, relheight= 0.2)
 
-        self.label_TabelaUsuarios=Label(self.frameTela_Usuarios, text="Tabela Usuarios",font =('arial', 28, 'bold'),fg =self.cor_texto_titulo,bg =self.corFundo)
+        self.label_TabelaUsuarios=Label(self.frameTela_Usuarios, text="Tabela Usuarios",font =self.fonte_titulo,fg =self.cor_texto_titulo,bg =self.corFundo)
         self.label_TabelaUsuarios.place(relx=0.35,rely=0.2,relwidth=0.29,relheight=0.06)
 
         #--------------------------------------------------------------------------------------------------------------------------------------------
@@ -1780,16 +1825,16 @@ class Telas(Funçao):
         self.bt_Printer = Button(self.frameTela_Usuarios,image=self.img_Printer,bg=self.corFundo,activebackground =self.corFundo,highlightthickness=0,border=0,command=self.bt_frameUsuarios_print)
         self.bt_Printer.place(relx= 0.34, rely=0.26, relwidth=0.06, relheight= 0.09)
 
-        self.bt_Search = Button(self.frameTela_Usuarios,image=self.img_Search,highlightthickness=0,border=0,command=self.busca_Usuarios)
+        self.bt_Search = Button(self.frameTela_Usuarios,image=self.img_Search,highlightthickness=0,bg=self.corFundo_pesquisa,border=0,command=self.busca_Usuarios)
         self.bt_Search.place(relx= 0.9, rely=0.26, relwidth=0.06, relheight= 0.09)
 
-        self.entry_Tab_usuario = Entry(self.frameTela_Usuarios,highlightthickness=0,border=0,font = ('verdana', 28, 'bold'),fg=self.cor_texto_pesquisa)
+        self.entry_Tab_usuario = Entry(self.frameTela_Usuarios,highlightthickness=0,border=0,font=self.fonte_texto_pesquisa,bg=self.corFundo_pesquisa,fg=self.cor_texto_pesquisa)
         self.entry_Tab_usuario.place(relx= 0.5, rely=0.26, relwidth=0.4, relheight= 0.09)
       
         #########################################################################################
         #listagem tabela
 
-        self.frame_2 = Frame(self.frameTela_Usuarios, bd=4, bg='grey')
+        self.frame_2 = Frame(self.frameTela_Usuarios, bd=4, bg=self.corFundo_tabela)
         self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
 
         self.listaUsuarios = ttk.Treeview(self.frame_2, height=3,column=("cpf","nome_completo", "data_nascimento", "endereco", "telefone", "email", "nome_usuario", "senha", "data_cadastro"))
@@ -1833,7 +1878,7 @@ class Telas(Funçao):
 
         style=ttk.Style()
         style.theme_use('default')
-        style.configure("Treeview",background='grey',foreground=self.cor_texto_titulo,rowheight=25,fieldbackground=self.corFundo)
+        style.configure("Treeview",background=self.corFundo_tabela,foreground=self.cor_texto_pesquisa,rowheight=25,fieldbackground=self.corFundo)
         style.map(self.listaUsuarios,"Treeview", background=[('select','red')])
 
         self.lista_usuarios()
@@ -1876,7 +1921,7 @@ class Telas(Funçao):
                           command=self.bt_frameMoradores_sair)
         self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
 
-        self.label_TabelaMoradores = Label(self.frameTela_Moradores, text="Tabela Moradores", font=('arial', 28, 'bold'),
+        self.label_TabelaMoradores = Label(self.frameTela_Moradores, text="Tabela Moradores", font=self.fonte_titulo,
                                       fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_TabelaMoradores.place(relx=0.35, rely=0.2, relwidth=0.32, relheight=0.06)
 
@@ -1903,18 +1948,18 @@ class Telas(Funçao):
                              activebackground=self.corFundo, highlightthickness=0, border=0,command=self.bt_frameMoradores_print)
         self.bt_Printer.place(relx=0.34, rely=0.26, relwidth=0.06, relheight=0.09)
 
-        self.bt_Search = Button(self.frameTela_Moradores, image=self.img_Search, highlightthickness=0, border=0,
+        self.bt_Search = Button(self.frameTela_Moradores, image=self.img_Search, highlightthickness=0,bg=self.corFundo_pesquisa, border=0,
                             command=self.busca_moradores)
         self.bt_Search.place(relx=0.9, rely=0.26, relwidth=0.06, relheight=0.09)
 
         self.entry_Tab_moradores = Entry(self.frameTela_Moradores, highlightthickness=0, border=0,
-                                   font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
+                                   font=self.fonte_texto_pesquisa, fg=self.cor_texto_pesquisa,bg=self.corFundo_pesquisa)
         self.entry_Tab_moradores.place(relx=0.5, rely=0.26, relwidth=0.4, relheight=0.09)
 
     #########################################################################################
     # listagem tabela
 
-        self.frame_2 = Frame(self.frameTela_Moradores, bd=4, bg='grey')
+        self.frame_2 = Frame(self.frameTela_Moradores, bd=4, bg=self.corFundo_tabela)
         self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
 
         self.listaMoradores = ttk.Treeview(self.frame_2, height=3,
@@ -1972,7 +2017,7 @@ class Telas(Funçao):
 
         style = ttk.Style()
         style.theme_use('default')
-        style.configure("Treeview", background='grey', foreground=self.cor_texto_titulo, rowheight=25,
+        style.configure("Treeview", background=self.corFundo_tabela, foreground=self.cor_texto_pesquisa, rowheight=25,
                     fieldbackground=self.corFundo)
         style.map(self.listaMoradores, "Treeview", foreground=[('select', 'red')])
 
@@ -2016,7 +2061,7 @@ class Telas(Funçao):
                           command=self.bt_frameProfessores_sair)
         self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
 
-        self.label_TabelaProfessores = Label(self.frameTela_Professores, text="Tabela Professores", font=('arial', 28, 'bold'),
+        self.label_TabelaProfessores = Label(self.frameTela_Professores, text="Tabela Professores", font=self.fonte_titulo,
                                       fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_TabelaProfessores.place(relx=0.32, rely=0.2, relwidth=0.40, relheight=0.06)
 
@@ -2043,7 +2088,7 @@ class Telas(Funçao):
                                 activebackground=self.corFundo, highlightthickness=0, border=0, command=self.bt_frameProfessores_print)
         self.bt_Printer.place(relx=0.34, rely=0.26, relwidth=0.06, relheight=0.09)
 
-        self.bt_Search = Button(self.frameTela_Professores, image=self.img_Search, highlightthickness=0, border=0,
+        self.bt_Search = Button(self.frameTela_Professores, image=self.img_Search, highlightthickness=0,bg=self.corFundo_pesquisa, border=0,
                                 command=self.busca_professores)
         self.bt_Search.place(relx=0.9, rely=0.26, relwidth=0.06, relheight=0.09)
 
@@ -2051,14 +2096,14 @@ class Telas(Funçao):
         
 
         self.entry_Tab_professores = Entry(self.frameTela_Professores, highlightthickness=0, border=0,
-                                        font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_texto_pesquisa,bg=self.corFundo_pesquisa, fg=self.cor_texto_pesquisa)
         self.entry_Tab_professores.place(relx=0.5, rely=0.26, relwidth=0.4, relheight=0.09)
 
         
         #########################################################################################
         # listagem tabela
 
-        self.frame_2 = Frame(self.frameTela_Professores, bd=4, bg='grey')
+        self.frame_2 = Frame(self.frameTela_Professores, bd=4, bg=self.corFundo_tabela)
         self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
 
         self.listaProfessores = ttk.Treeview(self.frame_2, height=3, column=("cpf", "nome_completo", "especialidade", "data_nascimento", "endereco", "telefone", "email", "data_cadastro"))
@@ -2100,7 +2145,7 @@ class Telas(Funçao):
 
         style = ttk.Style()
         style.theme_use('default')
-        style.configure("Treeview", background='grey', foreground=self.cor_texto_titulo, rowheight=25,
+        style.configure("Treeview", background=self.corFundo_tabela, foreground=self.cor_texto_pesquisa, rowheight=25,
                         fieldbackground=self.corFundo)
         style.map(self.listaProfessores, "Treeview", background=[('select', 'red')])
 
@@ -2141,7 +2186,7 @@ class Telas(Funçao):
                               command=self.bt_frameAulas_sair)
         self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
 
-        self.label_TabelaAulas = Label(self.frameTela_Aulas, text="Tabela Aulas", font=('arial', 28, 'bold'),
+        self.label_TabelaAulas = Label(self.frameTela_Aulas, text="Tabela Aulas", font=self.fonte_titulo,
                                           fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_TabelaAulas.place(relx=0.35, rely=0.2, relwidth=0.29, relheight=0.06)
 
@@ -2168,18 +2213,18 @@ class Telas(Funçao):
                                  activebackground=self.corFundo, highlightthickness=0, border=0,command=self.bt_frameAulas_print)
         self.bt_Printer.place(relx=0.34, rely=0.26, relwidth=0.06, relheight=0.09)
 
-        self.bt_Search = Button(self.frameTela_Aulas, image=self.img_Search, highlightthickness=0, border=0,
+        self.bt_Search = Button(self.frameTela_Aulas, image=self.img_Search, highlightthickness=0,bg=self.corFundo_pesquisa, border=0,
                                 command=self.busca_aulas)
         self.bt_Search.place(relx=0.9, rely=0.26, relwidth=0.06, relheight=0.09)
 
         self.entry_Tab_Aulas = Entry(self.frameTela_Aulas, highlightthickness=0, border=0,
-                                       font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
+                                       font=self.fonte_texto_pesquisa,bg=self.corFundo_pesquisa, fg=self.cor_texto_pesquisa)
         self.entry_Tab_Aulas.place(relx=0.5, rely=0.26, relwidth=0.4, relheight=0.09)
 
         #########################################################################################
         # listagem tabela
 
-        self.frame_2 = Frame(self.frameTela_Aulas, bd=4, bg='grey')
+        self.frame_2 = Frame(self.frameTela_Aulas, bd=4, bg=self.corFundo_tabela)
         self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
 
         self.listaAulas = ttk.Treeview(self.frame_2, height=9, column=(
@@ -2223,7 +2268,7 @@ class Telas(Funçao):
 
         style = ttk.Style()
         style.theme_use('default')
-        style.configure("Treeview", background='grey', foreground=self.cor_texto_titulo, rowheight=25,
+        style.configure("Treeview", background=self.corFundo_tabela, foreground=self.cor_texto_pesquisa, rowheight=25,
                         fieldbackground=self.corFundo)
         style.map(self.listaAulas, "Treeview", background=[('select', 'red')])
 
@@ -2265,7 +2310,7 @@ class Telas(Funçao):
                               command=self.bt_frameInscricao_sair)
         self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
 
-        self.label_TabelaAlunos = Label(self.frameTela_Inscricoes, text="Tabela inscrição", font=('arial', 28, 'bold'),
+        self.label_TabelaAlunos = Label(self.frameTela_Inscricoes, text="Tabela inscrição", font=self.fonte_titulo,
                                           fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_TabelaAlunos.place(relx=0.35, rely=0.2, relwidth=0.29, relheight=0.06)
 
@@ -2292,28 +2337,28 @@ class Telas(Funçao):
                                  activebackground=self.corFundo, highlightthickness=0, border=0,command=self.bt_frameInscricao_print)
         self.bt_Printer.place(relx=0.34, rely=0.26, relwidth=0.06, relheight=0.09)
 
-        self.bt_Search = Button(self.frameTela_Inscricoes, image=self.img_Search, highlightthickness=0, border=0,
+        self.bt_Search = Button(self.frameTela_Inscricoes, image=self.img_Search, highlightthickness=0,bg=self.corFundo_pesquisa, border=0,
                                 command=self.busca_inscricao)
         self.bt_Search.place(relx=0.9, rely=0.26, relwidth=0.06, relheight=0.09)
 
         self.entry_Tab_Inscricao = Entry(self.frameTela_Inscricoes, highlightthickness=0, border=0,
-                                       font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
+                                       font=self.fonte_texto_pesquisa,bg=self.corFundo_pesquisa, fg=self.cor_texto_pesquisa)
         self.entry_Tab_Inscricao.place(relx=0.5, rely=0.26, relwidth=0.4, relheight=0.09)
 
         #########################################################################################
         # listagem tabela
 
-        self.frame_2 = Frame(self.frameTela_Inscricoes, bd=4, bg='grey')
+        self.frame_2 = Frame(self.frameTela_Inscricoes, bd=4, bg=self.corFundo_tabela)
         self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
 
         self.listaInscricoes = ttk.Treeview(self.frame_2, height=5, column=(
         "col1", "col2", "col3", "col4", "col5"))
 
         self.listaInscricoes.heading("#0", text="")
-        self.listaInscricoes.heading("#1", text="Morador_CPF")
-        self.listaInscricoes.heading("#2", text="Aula_ID")
-        self.listaInscricoes.heading("#3", text="Status")
-        self.listaInscricoes.heading("#4", text="Matricula")
+        self.listaInscricoes.heading("#1", text="Matricula")
+        self.listaInscricoes.heading("#2", text="Morador_CPF")
+        self.listaInscricoes.heading("#3", text="Aula_ID")
+        self.listaInscricoes.heading("#4", text="Status")       
         self.listaInscricoes.heading("#5", text="Data Inscricao")
       
         self.listaInscricoes.column("#0", width=0)
@@ -2342,7 +2387,7 @@ class Telas(Funçao):
 
         style = ttk.Style()
         style.theme_use('default')
-        style.configure("Treeview", background='grey', foreground=self.cor_texto_titulo, rowheight=25,
+        style.configure("Treeview", background=self.corFundo_tabela, foreground=self.cor_texto_pesquisa, rowheight=25,
                         fieldbackground=self.corFundo)
         style.map(self.listaInscricoes, "Treeview", background=[('select', 'red')])
 
@@ -2380,7 +2425,7 @@ class Telas(Funçao):
                           command=self.bt_frameRelatorios_sair)
         self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
 
-        self.label_TabelaRelatorios = Label(self.frameTela_Relatorios, text="Relatorios", font=('arial', 28, 'bold'),
+        self.label_TabelaRelatorios = Label(self.frameTela_Relatorios, text="Relatorios", font=self.fonte_titulo,
                                       fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_TabelaRelatorios.place(relx=0.35, rely=0.2, relwidth=0.32, relheight=0.06)
 
@@ -2407,18 +2452,18 @@ class Telas(Funçao):
                              activebackground=self.corFundo, highlightthickness=0, border=0,command=self.bt_frameRelatorios_print)
         self.bt_Printer.place(relx=0.34, rely=0.26, relwidth=0.06, relheight=0.09)
 
-        self.bt_Search = Button(self.frameTela_Relatorios, image=self.img_Search, highlightthickness=0, border=0,
+        self.bt_Search = Button(self.frameTela_Relatorios, image=self.img_Search, highlightthickness=0,bg=self.corFundo_pesquisa, border=0,
                             command=self.busca_relatorios)
         self.bt_Search.place(relx=0.9, rely=0.26, relwidth=0.06, relheight=0.09)
 
         self.entry_Tab_Relatorios = Entry(self.frameTela_Relatorios, highlightthickness=0, border=0,
-                                   font=('verdana', 28, 'bold'), fg=self.cor_texto_pesquisa)
+                                   font=self.fonte_texto_pesquisa,bg=self.corFundo_pesquisa, fg=self.cor_texto_pesquisa)
         self.entry_Tab_Relatorios.place(relx=0.5, rely=0.26, relwidth=0.4, relheight=0.09)
 
     #########################################################################################
     # listagem tabela
 
-        self.frame_2 = Frame(self.frameTela_Relatorios, bd=4, bg='grey')
+        self.frame_2 = Frame(self.frameTela_Relatorios, bd=4, bg=self.corFundo_tabela)
         self.frame_2.place(relx=0.01, rely=0.37, relwidth=0.98, relheight=0.6)
 
         self.listaRelatorios = ttk.Treeview(self.frame_2, height=3,
@@ -2454,7 +2499,7 @@ class Telas(Funçao):
 
         style = ttk.Style()
         style.theme_use('default')
-        style.configure("Treeview", background='grey', foreground=self.cor_texto_titulo, rowheight=25,
+        style.configure("Treeview", background=self.corFundo_tabela, foreground=self.cor_texto_pesquisa, rowheight=25,
                     fieldbackground=self.corFundo)
         style.map(self.listaRelatorios, "Treeview", foreground=[('select', 'red')])
 
@@ -2497,116 +2542,116 @@ class Telas(Funçao):
     #label e entry
      
   
-        self.label_cpf_Moradores = Label(self.frameTelaADD_Moradores, text="CPF", font=('arial', 18, 'bold'),anchor='e',
+        self.label_cpf_Moradores = Label(self.frameTelaADD_Moradores, text="CPF", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_cpf_Moradores.place(relx=0.25, rely=0.1, relwidth=0.05, relheight=0.05)
 
         self.cpf_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
-                                      font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)     
+                                      font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)     
         self.cpf_Moradores_entry.place(relx=0.3, rely=0.1, relwidth=0.4, relheight=0.05)
 
-        self.label_nome_completo_Moradores = Label(self.frameTelaADD_Moradores, text="Nome Completo", font=('arial', 18, 'bold'),anchor='e',
+        self.label_nome_completo_Moradores = Label(self.frameTelaADD_Moradores, text="Nome Completo", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_nome_completo_Moradores.place(relx=0.12, rely=0.155, relwidth=0.18, relheight=0.05)
 
         self.nome_completo_Moradores_entry = Entry(self.frameTelaADD_Moradores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.nome_completo_Moradores_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
 
-        self.label_filiacao_Moradores = Label(self.frameTelaADD_Moradores, text="Filiação", font=('arial', 18, 'bold'),anchor='e',
+        self.label_filiacao_Moradores = Label(self.frameTelaADD_Moradores, text="Filiação", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_filiacao_Moradores.place(relx=0.2, rely=0.21, relwidth=0.1, relheight=0.05)
 
         self.filiacao_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.filiacao_Moradores_entry.place(relx=0.3, rely=0.21, relwidth=0.4, relheight=0.05)
 
-        self.label_data_nascimento_Moradores = Label(self.frameTelaADD_Moradores, text="Data Nascimento", font=('arial', 18, 'bold'),anchor='e',
+        self.label_data_nascimento_Moradores = Label(self.frameTelaADD_Moradores, text="Data Nascimento", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_data_nascimento_Moradores.place(relx=0.1, rely=0.265, relwidth=0.2, relheight=0.05)
 
         self.data_nascimento_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.data_nascimento_Moradores_entry.place(relx=0.3, rely=0.265, relwidth=0.4, relheight=0.05)
 
-        self.label_endereco_Moradores = Label(self.frameTelaADD_Moradores, text="Endereço", font=('arial', 18, 'bold'),anchor='e',
+        self.label_endereco_Moradores = Label(self.frameTelaADD_Moradores, text="Endereço", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_endereco_Moradores.place(relx=0.15, rely=0.32, relwidth=0.15, relheight=0.05)
 
         self.endereco_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.endereco_Moradores_entry.place(relx=0.3, rely=0.32, relwidth=0.4, relheight=0.05)
 
-        self.label_telefone_Moradores = Label(self.frameTelaADD_Moradores, text="Telefone", font=('arial', 18, 'bold'),anchor='e',
+        self.label_telefone_Moradores = Label(self.frameTelaADD_Moradores, text="Telefone", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_telefone_Moradores.place(relx=0.2, rely=0.375, relwidth=0.1, relheight=0.05)
 
         self.telefone_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.telefone_Moradores_entry.place(relx=0.3, rely=0.375, relwidth=0.4, relheight=0.05)
 
-        self.label_email_Moradores = Label(self.frameTelaADD_Moradores, text="Email", font=('arial', 18, 'bold'),anchor='e',
+        self.label_email_Moradores = Label(self.frameTelaADD_Moradores, text="Email", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_email_Moradores.place(relx=0.2, rely=0.43, relwidth=0.1, relheight=0.05)
 
         self.email_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.email_Moradores_entry.place(relx=0.3, rely=0.43, relwidth=0.4, relheight=0.05)
 
-        self.label_tipo_Moradores = Label(self.frameTelaADD_Moradores, text="Tipo", font=('arial', 18, 'bold'),anchor='e',
+        self.label_tipo_Moradores = Label(self.frameTelaADD_Moradores, text="Tipo", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_tipo_Moradores.place(relx=0.2, rely=0.485, relwidth=0.1, relheight=0.05)    
 
         self.tipo_Moradores_entry = Entry(self.frameTelaADD_Moradores,  
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.tipo_Moradores_entry.place(relx=0.3, rely=0.485, relwidth=0.4, relheight=0.05)
 
-        self.label_responsavel_nome_Moradores = Label(self.frameTelaADD_Moradores, text="Responsavel Nome", font=('arial', 18, 'bold'),anchor='e',
+        self.label_responsavel_nome_Moradores = Label(self.frameTelaADD_Moradores, text="Responsavel Nome", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_responsavel_nome_Moradores.place(relx=0.084, rely=0.54, relwidth=0.216, relheight=0.05)
 
         self.responsavel_nome_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.responsavel_nome_Moradores_entry.place(relx=0.3, rely=0.54, relwidth=0.4, relheight=0.05)
 
-        self.label_responsavel_cpf_Moradores = Label(self.frameTelaADD_Moradores, text="Responsavel CPF", font=('arial', 18, 'bold'),anchor='e',
+        self.label_responsavel_cpf_Moradores = Label(self.frameTelaADD_Moradores, text="Responsavel CPF", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_responsavel_cpf_Moradores.place(relx=0.085, rely=0.595, relwidth=0.215, relheight=0.05)
 
         self.responsavel_cpf_Moradores_entry = Entry(self.frameTelaADD_Moradores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.responsavel_cpf_Moradores_entry.place(relx=0.3, rely=0.595, relwidth=0.4, relheight=0.05)
 
-        self.label_documento_permissao_Moradores = Label(self.frameTelaADD_Moradores, text="Documento Permissão", font=('arial', 18, 'bold'),anchor='e',
+        self.label_documento_permissao_Moradores = Label(self.frameTelaADD_Moradores, text="Documento Permissão", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_documento_permissao_Moradores.place(relx=0.04, rely=0.65, relwidth=0.26, relheight=0.05)
 
         self.documento_permissao_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.documento_permissao_Moradores_entry.place(relx=0.3, rely=0.65, relwidth=0.4, relheight=0.05)
 
-        self.label_profissao_Moradores = Label(self.frameTelaADD_Moradores, text="Profissão", font=('arial', 18, 'bold'),anchor='e',
+        self.label_profissao_Moradores = Label(self.frameTelaADD_Moradores, text="Profissão", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_profissao_Moradores.place(relx=0.19, rely=0.705, relwidth=0.11, relheight=0.05)
 
         self.profissao_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.profissao_Moradores_entry.place(relx=0.3, rely=0.705, relwidth=0.4, relheight=0.05)
 
-        self.label_tipo_necessidade_Moradores = Label(self.frameTelaADD_Moradores, text="Tipo Necessidade", font=('arial', 18, 'bold'),anchor='e',
+        self.label_tipo_necessidade_Moradores = Label(self.frameTelaADD_Moradores, text="Tipo Necessidade", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_tipo_necessidade_Moradores.place(relx=0.085, rely=0.76, relwidth=0.214, relheight=0.05)
 
         self.tipo_necessidade_Moradores_entry = Entry(self.frameTelaADD_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.tipo_necessidade_Moradores_entry.place(relx=0.3, rely=0.76, relwidth=0.4, relheight=0.05)
 
-        self.label_grau_necessidade_Moradores = Label(self.frameTelaADD_Moradores, text="Grau Necessidade", font=('arial', 18, 'bold'),anchor='e',
+        self.label_grau_necessidade_Moradores = Label(self.frameTelaADD_Moradores, text="Grau Necessidade", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_grau_necessidade_Moradores.place(relx=0.085, rely=0.815, relwidth=0.214, relheight=0.05)
 
         self.grau_necessidade_Moradores_entry = Entry(self.frameTelaADD_Moradores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.grau_necessidade_Moradores_entry.place(relx=0.3, rely=0.815, relwidth=0.4, relheight=0.05)
 
 
@@ -2656,117 +2701,117 @@ class Telas(Funçao):
        
        
 
-        self.label_cpf_Moradores = Label(self.frameTelaEDT_Moradores, text="CPF", font=('arial', 18, 'bold'),anchor='e',
+        self.label_cpf_Moradores = Label(self.frameTelaEDT_Moradores, text="CPF", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_cpf_Moradores.place(relx=0.25, rely=0.1, relwidth=0.05, relheight=0.05)
 
         self.cpf_Moradores_entry = Entry(self.frameTelaEDT_Moradores, 
-                                      font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)     
+                                      font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)     
         self.cpf_Moradores_entry.place(relx=0.3, rely=0.1, relwidth=0.4, relheight=0.05)
 
-        self.label_nome_completo_Moradores = Label(self.frameTelaEDT_Moradores, text="Nome Completo", font=('arial', 18, 'bold'),anchor='e',
+        self.label_nome_completo_Moradores = Label(self.frameTelaEDT_Moradores, text="Nome Completo", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_nome_completo_Moradores.place(relx=0.12, rely=0.155, relwidth=0.18, relheight=0.05)
 
         self.nome_completo_Moradores_entry = Entry(self.frameTelaEDT_Moradores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.nome_completo_Moradores_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
 
-        self.label_filiacao_Moradores = Label(self.frameTelaEDT_Moradores, text="Filiação", font=('arial', 18, 'bold'),anchor='e',
+        self.label_filiacao_Moradores = Label(self.frameTelaEDT_Moradores, text="Filiação", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_filiacao_Moradores.place(relx=0.2, rely=0.21, relwidth=0.1, relheight=0.05)
 
         self.filiacao_Moradores_entry = Entry(self.frameTelaEDT_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.filiacao_Moradores_entry.place(relx=0.3, rely=0.21, relwidth=0.4, relheight=0.05)
 
-        self.label_data_nascimento_Moradores = Label(self.frameTelaEDT_Moradores, text="Data Nascimento", font=('arial', 18, 'bold'),anchor='e',
+        self.label_data_nascimento_Moradores = Label(self.frameTelaEDT_Moradores, text="Data Nascimento", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_data_nascimento_Moradores.place(relx=0.1, rely=0.265, relwidth=0.2, relheight=0.05)
 
         self.data_nascimento_Moradores_entry = Entry(self.frameTelaEDT_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.data_nascimento_Moradores_entry.place(relx=0.3, rely=0.265, relwidth=0.4, relheight=0.05)
 
-        self.label_endereco_Moradores = Label(self.frameTelaEDT_Moradores, text="Endereço", font=('arial', 18, 'bold'),anchor='e',
+        self.label_endereco_Moradores = Label(self.frameTelaEDT_Moradores, text="Endereço", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_endereco_Moradores.place(relx=0.15, rely=0.32, relwidth=0.15, relheight=0.05)
 
         self.endereco_Moradores_entry = Entry(self.frameTelaEDT_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.endereco_Moradores_entry.place(relx=0.3, rely=0.32, relwidth=0.4, relheight=0.05)
 
-        self.label_telefone_Moradores = Label(self.frameTelaEDT_Moradores, text="Telefone", font=('arial', 18, 'bold'),anchor='e',
+        self.label_telefone_Moradores = Label(self.frameTelaEDT_Moradores, text="Telefone", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_telefone_Moradores.place(relx=0.2, rely=0.375, relwidth=0.1, relheight=0.05)
 
         self.telefone_Moradores_entry = Entry(self.frameTelaEDT_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.telefone_Moradores_entry.place(relx=0.3, rely=0.375, relwidth=0.4, relheight=0.05)
 
-        self.label_email_Moradores = Label(self.frameTelaEDT_Moradores, text="Email", font=('arial', 18, 'bold'),anchor='e',
+        self.label_email_Moradores = Label(self.frameTelaEDT_Moradores, text="Email", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_email_Moradores.place(relx=0.2, rely=0.43, relwidth=0.1, relheight=0.05)
 
         self.email_Moradores_entry = Entry(self.frameTelaEDT_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.email_Moradores_entry.place(relx=0.3, rely=0.43, relwidth=0.4, relheight=0.05)
 
-        self.label_tipo_Moradores = Label(self.frameTelaEDT_Moradores, text="Tipo", font=('arial', 18, 'bold'),anchor='e',
+        self.label_tipo_Moradores = Label(self.frameTelaEDT_Moradores, text="Tipo", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_tipo_Moradores.place(relx=0.2, rely=0.485, relwidth=0.1, relheight=0.05)    
 
         self.tipo_Moradores_entry = Entry(self.frameTelaEDT_Moradores,  
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.tipo_Moradores_entry.place(relx=0.3, rely=0.485, relwidth=0.4, relheight=0.05)
 
-        self.label_responsavel_nome_Moradores = Label(self.frameTelaEDT_Moradores, text="Responsavel Nome", font=('arial', 18, 'bold'),anchor='e',
+        self.label_responsavel_nome_Moradores = Label(self.frameTelaEDT_Moradores, text="Responsavel Nome", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_responsavel_nome_Moradores.place(relx=0.084, rely=0.54, relwidth=0.216, relheight=0.05)
 
         self.responsavel_nome_Moradores_entry = Entry(self.frameTelaEDT_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.responsavel_nome_Moradores_entry.place(relx=0.3, rely=0.54, relwidth=0.4, relheight=0.05)
 
-        self.label_responsavel_cpf_Moradores = Label(self.frameTelaEDT_Moradores, text="Responsavel CPF", font=('arial', 18, 'bold'),anchor='e',
+        self.label_responsavel_cpf_Moradores = Label(self.frameTelaEDT_Moradores, text="Responsavel CPF", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_responsavel_cpf_Moradores.place(relx=0.085, rely=0.595, relwidth=0.215, relheight=0.05)
 
         self.responsavel_cpf_Moradores_entry = Entry(self.frameTelaEDT_Moradores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.responsavel_cpf_Moradores_entry.place(relx=0.3, rely=0.595, relwidth=0.4, relheight=0.05)
 
-        self.label_documento_permissao_Moradores = Label(self.frameTelaEDT_Moradores, text="Documento Permissão", font=('arial', 18, 'bold'),anchor='e',
+        self.label_documento_permissao_Moradores = Label(self.frameTelaEDT_Moradores, text="Documento Permissão", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_documento_permissao_Moradores.place(relx=0.04, rely=0.65, relwidth=0.26, relheight=0.05)
 
 
         self.documento_permissao_Moradores_entry = Entry(self.frameTelaEDT_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.documento_permissao_Moradores_entry.place(relx=0.3, rely=0.65, relwidth=0.4, relheight=0.05)
 
-        self.label_profissao_Moradores = Label(self.frameTelaEDT_Moradores, text="Profissão", font=('arial', 18, 'bold'),anchor='e',
+        self.label_profissao_Moradores = Label(self.frameTelaEDT_Moradores, text="Profissão", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_profissao_Moradores.place(relx=0.19, rely=0.705, relwidth=0.11, relheight=0.05)
 
         self.profissao_Moradores_entry = Entry(self.frameTelaEDT_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.profissao_Moradores_entry.place(relx=0.3, rely=0.705, relwidth=0.4, relheight=0.05)
 
-        self.label_tipo_necessidade_Moradores = Label(self.frameTelaEDT_Moradores, text="Tipo Necessidade", font=('arial', 18, 'bold'),anchor='e',
+        self.label_tipo_necessidade_Moradores = Label(self.frameTelaEDT_Moradores, text="Tipo Necessidade", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_tipo_necessidade_Moradores.place(relx=0.085, rely=0.76, relwidth=0.214, relheight=0.05)
 
         self.tipo_necessidade_Moradores_entry = Entry(self.frameTelaEDT_Moradores, 
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.tipo_necessidade_Moradores_entry.place(relx=0.3, rely=0.76, relwidth=0.4, relheight=0.05)
 
-        self.label_grau_necessidade_Moradores = Label(self.frameTelaEDT_Moradores, text="Grau Necessidade", font=('arial', 18, 'bold'),anchor='e',
+        self.label_grau_necessidade_Moradores = Label(self.frameTelaEDT_Moradores, text="Grau Necessidade", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_grau_necessidade_Moradores.place(relx=0.085, rely=0.815, relwidth=0.214, relheight=0.05)
 
         self.grau_necessidade_Moradores_entry = Entry(self.frameTelaEDT_Moradores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.grau_necessidade_Moradores_entry.place(relx=0.3, rely=0.815, relwidth=0.4, relheight=0.05)
 
 
@@ -2812,15 +2857,15 @@ class Telas(Funçao):
   
       
 
-        self.label_descricao_relatorios = Label(self.frameTelaADD_Relatorios, text="Descrição", font=('arial', 18, 'bold'),anchor='e',
+        self.label_descricao_relatorios = Label(self.frameTelaADD_Relatorios, text="Descrição", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_descricao_relatorios.place(relx=0.12, rely=0.155, relwidth=0.18, relheight=0.05)
 
         self.descricao_Relatorios_entry = Entry(self.frameTelaADD_Relatorios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.descricao_Relatorios_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
 
-        self.label_codigo_relatorios = Label(self.frameTelaADD_Relatorios, text="Codigo", font=('arial', 18, 'bold'),anchor='e',
+        self.label_codigo_relatorios = Label(self.frameTelaADD_Relatorios, text="Codigo", font=self.fonte_label_add_edt,anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_codigo_relatorios.place(relx=0.4, rely=0.21, relwidth=0.1, relheight=0.05)
 
@@ -2871,15 +2916,15 @@ class Telas(Funçao):
                                     fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_EdtRelatorios.place(relx=0.24, rely=0.02, relwidth=0.5, relheight=0.06)
 
-        self.label_descricao_relatorios = Label(self.frameTelaEDT_Relatorios, text="Descrição", font=('arial', 18, 'bold'), anchor='e',
+        self.label_descricao_relatorios = Label(self.frameTelaEDT_Relatorios, text="Descrição", font=self.fonte_label_add_edt, anchor='e',
                                             fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_descricao_relatorios.place(relx=0.12, rely=0.155, relwidth=0.18, relheight=0.05)
 
         self.descricao_Relatorios_entry = Entry(self.frameTelaEDT_Relatorios,
-                                            font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                            font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.descricao_Relatorios_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
 
-        self.label_codigo_relatorios = Label(self.frameTelaEDT_Relatorios, text="Codigo", font=('arial', 18, 'bold'), anchor='e',
+        self.label_codigo_relatorios = Label(self.frameTelaEDT_Relatorios, text="Codigo", font=self.fonte_label_add_edt, anchor='e',
                                         fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_codigo_relatorios.place(relx=0.4, rely=0.21, relwidth=0.1, relheight=0.05)
 
@@ -2930,68 +2975,68 @@ class Telas(Funçao):
                                         fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_AddProfessores.place(relx=0.18, rely=0.02, relwidth=0.55, relheight=0.06)
 
-        self.label_cpf_Professores = Label(self.frameTelaADD_Professores, text="CPF", font=('arial', 18, 'bold'), anchor='e',
+        self.label_cpf_Professores = Label(self.frameTelaADD_Professores, text="CPF", font=self.fonte_label_add_edt, anchor='e',
                                         fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_cpf_Professores.place(relx=0.25, rely=0.1, relwidth=0.05, relheight=0.05)
 
         self.cpf_professores_entry = Entry(self.frameTelaADD_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.cpf_professores_entry.place(relx=0.3, rely=0.1, relwidth=0.4, relheight=0.05)
 
-        self.label_nome_completo_professores = Label(self.frameTelaADD_Professores, text="Nome Completo", font=('arial', 18, 'bold'), anchor='e',
+        self.label_nome_completo_professores = Label(self.frameTelaADD_Professores, text="Nome Completo", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_nome_completo_professores.place(relx=0.12, rely=0.155, relwidth=0.18, relheight=0.05)
 
         self.nome_completo_professores_entry = Entry(self.frameTelaADD_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.nome_completo_professores_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
 
-        self.label_especialidade_professores = Label(self.frameTelaADD_Professores, text="Especialidade", font=('arial', 18, 'bold'), anchor='e',
+        self.label_especialidade_professores = Label(self.frameTelaADD_Professores, text="Especialidade", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_especialidade_professores.place(relx=0.12, rely=0.21, relwidth=0.18, relheight=0.05)
 
         self.especialidade_professores_entry = Entry(self.frameTelaADD_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.especialidade_professores_entry.place(relx=0.3, rely=0.21, relwidth=0.4, relheight=0.05)
         
-        self.label_data_nascimento_professores = Label(self.frameTelaADD_Professores, text="Data Nascimento", font=('arial', 18, 'bold'), anchor='e',
+        self.label_data_nascimento_professores = Label(self.frameTelaADD_Professores, text="Data Nascimento", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_data_nascimento_professores.place(relx=0.1, rely=0.265, relwidth=0.2, relheight=0.05)
 
         self.data_nascimento_professores_entry = Entry(self.frameTelaADD_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.data_nascimento_professores_entry.place(relx=0.3, rely=0.265, relwidth=0.4, relheight=0.05)
 
-        self.label_endereco_professores = Label(self.frameTelaADD_Professores, text="Endereço", font=('arial', 18, 'bold'), anchor='e',
+        self.label_endereco_professores = Label(self.frameTelaADD_Professores, text="Endereço", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_endereco_professores.place(relx=0.15, rely=0.32, relwidth=0.15, relheight=0.05)
 
         self.endereco_professores_entry = Entry(self.frameTelaADD_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.endereco_professores_entry.place(relx=0.3, rely=0.32, relwidth=0.4, relheight=0.05)
 
-        self.label_telefone_professores = Label(self.frameTelaADD_Professores, text="Telefone", font=('arial', 18, 'bold'), anchor='e',
+        self.label_telefone_professores = Label(self.frameTelaADD_Professores, text="Telefone", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_telefone_professores.place(relx=0.2, rely=0.375, relwidth=0.1, relheight=0.05)
 
         self.telefone_professores_entry = Entry(self.frameTelaADD_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.telefone_professores_entry.place(relx=0.3, rely=0.375, relwidth=0.4, relheight=0.05)
 
-        self.label_email_professores = Label(self.frameTelaADD_Professores, text="Email", font=('arial', 18, 'bold'), anchor='e',
+        self.label_email_professores = Label(self.frameTelaADD_Professores, text="Email", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_email_professores.place(relx=0.2, rely=0.43, relwidth=0.1, relheight=0.05)
 
         self.email_professores_entry = Entry(self.frameTelaADD_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.email_professores_entry.place(relx=0.3, rely=0.43, relwidth=0.4, relheight=0.05)
 
-        self.label_data_cadastro_professores = Label(self.frameTelaADD_Professores, text="Data Cadastro", font=('arial', 18, 'bold'), anchor='e',
+        self.label_data_cadastro_professores = Label(self.frameTelaADD_Professores, text="Data Cadastro", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_data_cadastro_professores.place(relx=0.1, rely=0.485, relwidth=0.2, relheight=0.05)
 
         self.data_cadastro_professores_entry = Entry(self.frameTelaADD_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.data_cadastro_professores_entry.place(relx=0.3, rely=0.485, relwidth=0.4, relheight=0.05)
 
         self.bt_Salvar = Button(self.frameTelaADD_Professores, image=self.img_Salvar, bg=self.corFundo,
@@ -3028,60 +3073,60 @@ class Telas(Funçao):
        
 
        #######
-        self.label_nome_completo_Professores = Label(self.frameTelaEDT_Professores, text="Nome Completo", font=('arial', 18, 'bold'), anchor='e',
+        self.label_nome_completo_Professores = Label(self.frameTelaEDT_Professores, text="Nome Completo", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_nome_completo_Professores.place(relx=0.12, rely=0.155, relwidth=0.18, relheight=0.05)
 
         self.nome_completo_professores_entry = Entry(self.frameTelaEDT_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.nome_completo_professores_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
 
-        self.label_especialidade_Professores = Label(self.frameTelaEDT_Professores, text="Especialidade", font=('arial', 18, 'bold'), anchor='e',
+        self.label_especialidade_Professores = Label(self.frameTelaEDT_Professores, text="Especialidade", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_especialidade_Professores.place(relx=0.12, rely=0.21, relwidth=0.18, relheight=0.05)
 
         self.especialidade_professores_entry = Entry(self.frameTelaEDT_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.especialidade_professores_entry.place(relx=0.3, rely=0.21, relwidth=0.4, relheight=0.05)
 
-        self.label_data_nascimento_Professores = Label(self.frameTelaEDT_Professores, text="Data Nascimento", font=('arial', 18, 'bold'), anchor='e',
+        self.label_data_nascimento_Professores = Label(self.frameTelaEDT_Professores, text="Data Nascimento", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_data_nascimento_Professores.place(relx=0.1, rely=0.265, relwidth=0.2, relheight=0.05)
 
         self.data_nascimento_professores_entry = Entry(self.frameTelaEDT_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.data_nascimento_professores_entry.place(relx=0.3, rely=0.265, relwidth=0.4, relheight=0.05)
 
-        self.label_endereco_Professores = Label(self.frameTelaEDT_Professores, text="Endereço", font=('arial', 18, 'bold'), anchor='e',
+        self.label_endereco_Professores = Label(self.frameTelaEDT_Professores, text="Endereço", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_endereco_Professores.place(relx=0.15, rely=0.32, relwidth=0.15, relheight=0.05)
 
         self.endereco_professores_entry = Entry(self.frameTelaEDT_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.endereco_professores_entry.place(relx=0.3, rely=0.32, relwidth=0.4, relheight=0.05)
 
-        self.label_telefone_Professores = Label(self.frameTelaEDT_Professores, text="Telefone", font=('arial', 18, 'bold'), anchor='e',
+        self.label_telefone_Professores = Label(self.frameTelaEDT_Professores, text="Telefone", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_telefone_Professores.place(relx=0.2, rely=0.375, relwidth=0.1, relheight=0.05)
 
         self.telefone_professores_entry = Entry(self.frameTelaEDT_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.telefone_professores_entry.place(relx=0.3, rely=0.375, relwidth=0.4, relheight=0.05)
 
-        self.label_email_Professores = Label(self.frameTelaEDT_Professores, text="Email", font=('arial', 18, 'bold'), anchor='e',
+        self.label_email_Professores = Label(self.frameTelaEDT_Professores, text="Email", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_email_Professores.place(relx=0.2, rely=0.43, relwidth=0.1, relheight=0.05)
 
         self.email_professores_entry = Entry(self.frameTelaEDT_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.email_professores_entry.place(relx=0.3, rely=0.43, relwidth=0.4, relheight=0.05)
 
-        self.label_data_cadastro_Professores = Label(self.frameTelaEDT_Professores, text="Data Cadastro", font=('arial', 18, 'bold'), anchor='e',
+        self.label_data_cadastro_Professores = Label(self.frameTelaEDT_Professores, text="Data Cadastro", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_data_cadastro_Professores.place(relx=0.1, rely=0.485, relwidth=0.2, relheight=0.05)
 
         self.data_cadastro_professores_entry = Entry(self.frameTelaEDT_Professores,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.data_cadastro_professores_entry.place(relx=0.3, rely=0.485, relwidth=0.4, relheight=0.05)
 
         self.bt_Salvar = Button(self.frameTelaEDT_Professores, image=self.img_Salvar, bg=self.corFundo,
@@ -3117,76 +3162,76 @@ class Telas(Funçao):
                                     fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_AddUsuarios.place(relx=0.18, rely=0.02, relwidth=0.55, relheight=0.06)
 
-        self.label_cpf_Usuarios = Label(self.frameTelaADD_Usuarios, text="CPF", font=('arial', 18, 'bold'), anchor='e',
+        self.label_cpf_Usuarios = Label(self.frameTelaADD_Usuarios, text="CPF", font=self.fonte_label_add_edt, anchor='e',
                                         fg  = self.cor_texto_titulo, bg=self.corFundo)
         self.label_cpf_Usuarios.place(relx=0.25, rely=0.1, relwidth=0.05, relheight=0.05)
 
         self.cpf_Usuarios_entry = Entry(self.frameTelaADD_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.cpf_Usuarios_entry.place(relx=0.3, rely=0.1, relwidth=0.4, relheight=0.05)
 
-        self.label_nome_completo_Usuarios = Label(self.frameTelaADD_Usuarios, text="Nome Completo", font=('arial', 18, 'bold'), anchor='e',
+        self.label_nome_completo_Usuarios = Label(self.frameTelaADD_Usuarios, text="Nome Completo", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_nome_completo_Usuarios.place(relx=0.12, rely=0.155, relwidth=0.18, relheight=0.05)
 
         self.nome_completo_Usuarios_entry = Entry(self.frameTelaADD_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.nome_completo_Usuarios_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
 
-        self.label_data_nascimento_Usuarios = Label(self.frameTelaADD_Usuarios, text="Data Nascimento", font=('arial', 18, 'bold'), anchor='e',
+        self.label_data_nascimento_Usuarios = Label(self.frameTelaADD_Usuarios, text="Data Nascimento", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_data_nascimento_Usuarios.place(relx=0.1, rely=0.21, relwidth=0.2, relheight=0.05)
 
         self.data_nascimento_Usuarios_entry = Entry(self.frameTelaADD_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.data_nascimento_Usuarios_entry.place(relx=0.3, rely=0.21, relwidth=0.4, relheight=0.05)
 
-        self.label_endereco_Usuarios = Label(self.frameTelaADD_Usuarios, text="Endereço", font=('arial', 18, 'bold'), anchor='e',
+        self.label_endereco_Usuarios = Label(self.frameTelaADD_Usuarios, text="Endereço", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_endereco_Usuarios.place(relx=0.15, rely=0.265, relwidth=0.15, relheight=0.05)
 
         self.endereco_Usuarios_entry = Entry(self.frameTelaADD_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.endereco_Usuarios_entry.place(relx=0.3, rely=0.265, relwidth=0.4, relheight=0.05)
 
-        self.label_telefone_Usuarios = Label(self.frameTelaADD_Usuarios, text="Telefone", font=('arial', 18, 'bold'), anchor='e',
+        self.label_telefone_Usuarios = Label(self.frameTelaADD_Usuarios, text="Telefone", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_telefone_Usuarios.place(relx=0.2, rely=0.32, relwidth=0.1, relheight=0.05)
 
         self.telefone_Usuarios_entry = Entry(self.frameTelaADD_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.telefone_Usuarios_entry.place(relx=0.3, rely=0.32, relwidth=0.4, relheight=0.05)
 
-        self.label_email_Usuarios = Label(self.frameTelaADD_Usuarios, text="Email", font=('arial', 18, 'bold'), anchor='e',
+        self.label_email_Usuarios = Label(self.frameTelaADD_Usuarios, text="Email", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_email_Usuarios.place(relx=0.2, rely=0.375, relwidth=0.1, relheight=0.05)
 
         self.email_Usuarios_entry = Entry(self.frameTelaADD_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.email_Usuarios_entry.place(relx=0.3, rely=0.375, relwidth=0.4, relheight=0.05)
 
-        self.label_nome_usuario_Usuarios = Label(self.frameTelaADD_Usuarios, text="Nome Usuario", font=('arial', 18, 'bold'), anchor='e',
+        self.label_nome_usuario_Usuarios = Label(self.frameTelaADD_Usuarios, text="Nome Usuario", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_nome_usuario_Usuarios.place(relx=0.12, rely=0.43, relwidth=0.18, relheight=0.05)
 
         self.nome_usuario_Usuarios_entry = Entry(self.frameTelaADD_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.nome_usuario_Usuarios_entry.place(relx=0.3, rely=0.43, relwidth=0.4, relheight=0.05)
 
-        self.label_senha_Usuarios = Label(self.frameTelaADD_Usuarios, text="Senha", font=('arial', 18, 'bold'), anchor='e',
+        self.label_senha_Usuarios = Label(self.frameTelaADD_Usuarios, text="Senha", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_senha_Usuarios.place(relx=0.2, rely=0.485, relwidth=0.1, relheight=0.05)
 
         self.senha_Usuarios_entry = Entry(self.frameTelaADD_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.senha_Usuarios_entry.place(relx=0.3, rely=0.485, relwidth=0.4, relheight=0.05)
 
-        self.label_data_cadastro_Usuarios = Label(self.frameTelaADD_Usuarios, text="Data Cadastro", font=('arial', 18, 'bold'), anchor='e',
+        self.label_data_cadastro_Usuarios = Label(self.frameTelaADD_Usuarios, text="Data Cadastro", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_data_cadastro_Usuarios.place(relx=0.1, rely=0.54, relwidth=0.2, relheight=0.05)
 
         self.data_cadastro_Usuarios_entry = Entry(self.frameTelaADD_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.data_cadastro_Usuarios_entry.place(relx=0.3, rely=0.54, relwidth=0.4, relheight=0.05)
 
         self.bt_Salvar = Button(self.frameTelaADD_Usuarios, image=self.img_Salvar, bg=self.corFundo,
@@ -3224,63 +3269,63 @@ class Telas(Funçao):
         self.label_nome_completo_Usuarios.place(relx=0.12, rely=0.155, relwidth=0.18, relheight=0.05)
 
         self.nome_completo_Usuarios_entry = Entry(self.frameTelaEDT_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.nome_completo_Usuarios_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
 
-        self.label_data_nascimento_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Data Nascimento", font=('arial', 18, 'bold'), anchor='e',
+        self.label_data_nascimento_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Data Nascimento", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_data_nascimento_Usuarios.place(relx=0.1, rely=0.21, relwidth=0.2, relheight=0.05)
 
         self.data_nascimento_Usuarios_entry = Entry(self.frameTelaEDT_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.data_nascimento_Usuarios_entry.place(relx=0.3, rely=0.21, relwidth=0.4, relheight=0.05)
 
-        self.label_endereco_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Endereço", font=('arial', 18, 'bold'), anchor='e',
+        self.label_endereco_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Endereço", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_endereco_Usuarios.place(relx=0.15, rely=0.265, relwidth=0.15, relheight=0.05)
 
         self.endereco_Usuarios_entry = Entry(self.frameTelaEDT_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.endereco_Usuarios_entry.place(relx=0.3, rely=0.265, relwidth=0.4, relheight=0.05)
 
-        self.label_telefone_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Telefone", font=('arial', 18, 'bold'), anchor='e',
+        self.label_telefone_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Telefone", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_telefone_Usuarios.place(relx=0.2, rely=0.32, relwidth=0.1, relheight=0.05)
 
         self.telefone_Usuarios_entry = Entry(self.frameTelaEDT_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.telefone_Usuarios_entry.place(relx=0.3, rely=0.32, relwidth=0.4, relheight=0.05)
 
-        self.label_email_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Email", font=('arial', 18, 'bold'), anchor='e',
+        self.label_email_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Email", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_email_Usuarios.place(relx=0.2, rely=0.375, relwidth=0.1, relheight=0.05)     
 
         self.email_Usuarios_entry = Entry(self.frameTelaEDT_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.email_Usuarios_entry.place(relx=0.3, rely=0.375, relwidth=0.4, relheight=0.05)
 
-        self.label_nome_usuario_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Nome Usuario", font=('arial', 18, 'bold'), anchor='e',
+        self.label_nome_usuario_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Nome Usuario", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_nome_usuario_Usuarios.place(relx=0.12, rely=0.43, relwidth=0.18, relheight=0.05)
 
         self.nome_usuario_Usuarios_entry = Entry(self.frameTelaEDT_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.nome_usuario_Usuarios_entry.place(relx=0.3, rely=0.43, relwidth=0.4, relheight=0.05)
 
-        self.label_senha_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Senha", font=('arial', 18, 'bold'), anchor='e',
+        self.label_senha_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Senha", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_senha_Usuarios.place(relx=0.2, rely=0.485, relwidth=0.1, relheight=0.05)
 
         self.senha_Usuarios_entry = Entry(self.frameTelaEDT_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.senha_Usuarios_entry.place(relx=0.3, rely=0.485, relwidth=0.4, relheight=0.05)
 
-        self.label_data_cadastro_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Data Cadastro", font=('arial', 18, 'bold'), anchor='e',
+        self.label_data_cadastro_Usuarios = Label(self.frameTelaEDT_Usuarios, text="Data Cadastro", font=self.fonte_label_add_edt, anchor='e',
                                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_data_cadastro_Usuarios.place(relx=0.1, rely=0.54, relwidth=0.2, relheight=0.05)
 
         self.data_cadastro_Usuarios_entry = Entry(self.frameTelaEDT_Usuarios,
-                                        font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
+                                        font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
         self.data_cadastro_Usuarios_entry.place(relx=0.3, rely=0.54, relwidth=0.4, relheight=0.05)
 
         self.bt_Salvar = Button(self.frameTelaEDT_Usuarios, image=self.img_Salvar, bg=self.corFundo,
@@ -3316,25 +3361,274 @@ class Telas(Funçao):
                                 fg=self.cor_texto_titulo, bg=self.corFundo)
         self.label_AddAulas.place(relx=0.18, rely=0.02, relwidth=0.55, relheight=0.06)
 
-        self.label_nome_aula_Aulas = Label(self.frameTelaADD_Aulas, text="Nome Aula", font=('arial', 18, 'bold'), anchor    ='e',
+        self.label_nome_Aulas = Label(self.frameTelaADD_Aulas, text="Nome Aula", font=self.fonte_label_add_edt, anchor    ='e',
                                         fg=self.cor_texto_titulo, bg=self.corFundo)
-        self.label_nome_aula_Aulas.place(relx=0.15, rely=0.1, relwidth=0.15, relheight=0.05)
+        self.label_nome_Aulas.place(relx=0.15, rely=0.1, relwidth=0.15, relheight=0.05)
 
-        self.nome_aula_Aulas_entry = Entry(self.frameTelaADD_Aulas, font=('verdana', 14, 'bold'), fg=self.cor_texto_pesquisa)
-        self.nome_aula_Aulas_entry.place(relx=0.3, rely=0.1, relwidth=0.4, relheight=0.05)
+        self.nome_Aulas_entry = Entry(self.frameTelaADD_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.nome_Aulas_entry.place(relx=0.3, rely=0.1, relwidth=0.4, relheight=0.05)
 
-        
-                                           
-       
-        
-        
-        
+        self.label_descricao_Aulas = Label(self.frameTelaADD_Aulas, text="Descrição", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_descricao_Aulas.place(relx=0.15, rely=0.155, relwidth=0.15, relheight=0.05)
+
+        self.descricao_Aulas_entry = Entry(self.frameTelaADD_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.descricao_Aulas_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
+
+        self.label_professor_Aulas = Label(self.frameTelaADD_Aulas, text="Professor", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_professor_Aulas.place(relx=0.15, rely=0.21, relwidth=0.15, relheight=0.05)
+
+        self.professor_Aulas_entry = Entry(self.frameTelaADD_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.professor_Aulas_entry.place(relx=0.3, rely=0.21, relwidth=0.4, relheight=0.05)
+
+        self.label_dias_semana_Aulas = Label(self.frameTelaADD_Aulas, text="Dias Semana", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_dias_semana_Aulas.place(relx=0.15, rely=0.265, relwidth=0.15, relheight=0.05)
+
+        self.dias_semana_Aulas_entry = Entry(self.frameTelaADD_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.dias_semana_Aulas_entry.place(relx=0.3, rely=0.265, relwidth=0.4, relheight=0.05)
+
+        self.label_horario_inicio_Aulas = Label(self.frameTelaADD_Aulas, text="Horario Inicio", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_horario_inicio_Aulas.place(relx=0.1, rely=0.32, relwidth=0.2, relheight=0.05)
+
+        self.horario_inicio_Aulas_entry = Entry(self.frameTelaADD_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.horario_inicio_Aulas_entry.place(relx=0.3, rely=0.32, relwidth=0.4, relheight=0.05)
+
+        self.label_horario_termino_Aulas = Label(self.frameTelaADD_Aulas, text="Horario Termino", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_horario_termino_Aulas.place(relx=0.1, rely=0.375, relwidth=0.2, relheight=0.05)
+
+        self.horario_termino_Aulas_entry = Entry(self.frameTelaADD_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.horario_termino_Aulas_entry.place(relx=0.3, rely=0.375, relwidth=0.4, relheight=0.05)
+
+        self.label_numero_vagas_Aulas = Label(self.frameTelaADD_Aulas, text="Numero Vagas", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_numero_vagas_Aulas.place(relx=0.1, rely=0.43, relwidth=0.2, relheight=0.05)
+
+        self.numero_vagas_Aulas_entry = Entry(self.frameTelaADD_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.numero_vagas_Aulas_entry.place(relx=0.3, rely=0.43, relwidth=0.4, relheight=0.05)
+
+        self.label_local_Aulas = Label(self.frameTelaADD_Aulas, text="Local", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_local_Aulas.place(relx=0.2, rely=0.485, relwidth=0.1, relheight=0.05)
+
+        self.local_Aulas_entry = Entry(self.frameTelaADD_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)    
+        self.local_Aulas_entry.place(relx=0.3, rely=0.485, relwidth=0.4, relheight=0.05)    
+
+
+        self.bt_Salvar = Button(self.frameTelaADD_Aulas, image=self.img_Salvar, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0, command=self.add_aulas)
+        self.bt_Salvar.place(relx=0.37, rely=0.87, relwidth=0.25, relheight=0.13)
+
+    def telaEDT_Aulas(self):
+        self.frameTelaEDT_Aulas = Frame(self.root, bg=self.corFundo)
+        self.frameTelaEDT_Aulas.place(relheight=1, relwidth=1)
+        # --------------------------------------------------------------------------------------------------------------------------------------------
+        # botoes superior
+        self.bt_Home = Button(self.frameTelaEDT_Aulas, image=self.img_Home, bg=self.corFundo,
+                          activebackground=self.corFundo, highlightthickness=0, border=0,command=self.bt_frameEDT_Aulas_Home)
+        self.bt_Home.place(relx=0, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Sol = Button(self.frameTelaEDT_Aulas, image=self.img_Sol, bg=self.corFundo, activebackground=self.corFundo,
+                            highlightthickness=0, border=0, command=self.bt_frameEDT_Aulas_sol)
+        self.bt_Sol.place(relx=0.73, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Avatar = Button(self.frameTelaEDT_Aulas, image=self.img_avatar, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Avatar.place(relx=0.82, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Sair = Button(self.frameTelaEDT_Aulas, image=self.img_log_out, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0,
+                            command=self.bt_frameEDT_Aulas_sair)
+        self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.label_EdtAulas = Label(self.frameTelaEDT_Aulas, text="Editar Aulas", font=('arial', 38, 'bold'),
+                                    fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_EdtAulas.place(relx=0.24, rely=0.02, relwidth=0.5, relheight=0.06)
+
+        self.label_nome_Aulas = Label(self.frameTelaEDT_Aulas, text="Nome Aula", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_nome_Aulas.place(relx=0.15, rely=0.1, relwidth=0.15, relheight=0.05)
+
+        self.nome_Aulas_entry = Entry(self.frameTelaEDT_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.nome_Aulas_entry.place(relx=0.3, rely=0.1, relwidth=0.4, relheight=0.05)
+
+        self.label_descricao_Aulas = Label(self.frameTelaEDT_Aulas, text="Descrição", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_descricao_Aulas.place(relx=0.15, rely=0.155, relwidth=0.15, relheight=0.05)
+
+        self.descricao_Aulas_entry = Entry(self.frameTelaEDT_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.descricao_Aulas_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
+
+        self.label_professor_Aulas = Label(self.frameTelaEDT_Aulas, text="Professor", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_professor_Aulas.place(relx=0.15, rely=0.21, relwidth=0.15, relheight=0.05)
+
+        self.professor_Aulas_entry = Entry(self.frameTelaEDT_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.professor_Aulas_entry.place(relx=0.3, rely=0.21, relwidth=0.4, relheight=0.05)
+
+        self.label_dias_semana_Aulas = Label(self.frameTelaEDT_Aulas, text="Dias Semana", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_dias_semana_Aulas.place(relx=0.15, rely=0.265, relwidth=0.15, relheight=0.05)
+
+        self.dias_semana_Aulas_entry = Entry(self.frameTelaEDT_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.dias_semana_Aulas_entry.place(relx=0.3, rely=0.265, relwidth=0.4, relheight=0.05)
+
+        self.label_horario_inicio_Aulas = Label(self.frameTelaEDT_Aulas, text="Horario Inicio", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_horario_inicio_Aulas.place(relx=0.1, rely=0.32, relwidth=0.2, relheight=0.05)
+
+        self.horario_inicio_Aulas_entry = Entry(self.frameTelaEDT_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.horario_inicio_Aulas_entry.place(relx=0.3, rely=0.32, relwidth=0.4, relheight=0.05)
+
+        self.label_horario_termino_Aulas = Label(self.frameTelaEDT_Aulas, text="Horario Termino", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_horario_termino_Aulas.place(relx=0.1, rely=0.375, relwidth=0.2, relheight=0.05)
+
+        self.horario_termino_Aulas_entry = Entry(self.frameTelaEDT_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.horario_termino_Aulas_entry.place(relx=0.3, rely=0.375, relwidth=0.4, relheight=0.05)
+
+        self.label_numero_vagas_Aulas = Label(self.frameTelaEDT_Aulas, text="Numero Vagas", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_numero_vagas_Aulas.place(relx=0.1, rely=0.43, relwidth=0.2, relheight=0.05)
+
+        self.numero_vagas_Aulas_entry = Entry(self.frameTelaEDT_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.numero_vagas_Aulas_entry.place(relx=0.3, rely=0.43, relwidth=0.4, relheight=0.05)
+
+        self.label_local_Aulas = Label(self.frameTelaEDT_Aulas, text="Local", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_local_Aulas.place(relx=0.2, rely=0.485, relwidth=0.1, relheight=0.05)
+
+        self.local_Aulas_entry = Entry(self.frameTelaEDT_Aulas, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)    
+        self.local_Aulas_entry.place(relx=0.3, rely=0.485, relwidth=0.4, relheight=0.05)    
+
+
+        self.bt_Salvar = Button(self.frameTelaEDT_Aulas, image=self.img_Salvar, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0, command=self.altera_aulas)
+        self.bt_Salvar.place(relx=0.37, rely=0.87, relwidth=0.25, relheight=0.13)
+#
+    def telaADD_Inscricao(self):
+        self.frameTelaADD_Inscricao = Frame(self.root, bg=self.corFundo)
+        self.frameTelaADD_Inscricao.place(relheight=1, relwidth=1)
+        # --------------------------------------------------------------------------------------------------------------------------------------------
+        # botoes superior
+
+        self.bt_Home = Button(self.frameTelaADD_Inscricao, image=self.img_Home, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0, command=self.bt_FrameADD_Inscricao_Home)
+        self.bt_Home.place(relx=0, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Sol = Button(self.frameTelaADD_Inscricao, image=self.img_Sol, bg=self.corFundo, activebackground=self.corFundo,
+                            highlightthickness=0, border=0, command=self.bt_FrameADD_Inscricao_sol)
+        self.bt_Sol.place(relx=0.73, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Avatar = Button(self.frameTelaADD_Inscricao, image=self.img_avatar, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Avatar.place(relx=0.82, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Sair = Button(self.frameTelaADD_Inscricao, image=self.img_log_out, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0,
+                            command=self.bt_FrameADD_Inscricao_sair)
+        self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
+
+        ##########
+
+        self.label_AddInscricao = Label(self.frameTelaADD_Inscricao, text="Adicionar Inscricao", font=('arial', 38, 'bold'),
+                                    fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_AddInscricao.place(relx=0.18, rely=0.02, relwidth=0.55, relheight=0.06)
+
+        self.label_morador_cpf_Inscricao = Label(self.frameTelaADD_Inscricao, text="Morador CPF", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_morador_cpf_Inscricao.place(relx=0.15, rely=0.1, relwidth=0.15, relheight=0.05)
+
+        self.morador_cpf_Inscricao_entry = Entry(self.frameTelaADD_Inscricao, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.morador_cpf_Inscricao_entry.place(relx=0.3, rely=0.1, relwidth=0.4, relheight=0.05)
+
+        self.label_aula_codigo_Inscricao = Label(self.frameTelaADD_Inscricao, text="Aula Codigo", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_aula_codigo_Inscricao.place(relx=0.15, rely=0.155, relwidth=0.15, relheight=0.05)
+
+        self.aula_codigo_Inscricao_entry = Entry(self.frameTelaADD_Inscricao, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.aula_codigo_Inscricao_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
+
+        self.label_status_Inscricao = Label(self.frameTelaADD_Inscricao, text="Status", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_status_Inscricao.place(relx=0.15, rely=0.21, relwidth=0.15, relheight=0.05)
+
+        self.status_Inscricao_entry = Entry(self.frameTelaADD_Inscricao, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.status_Inscricao_entry.place(relx=0.3, rely=0.21, relwidth=0.4, relheight=0.05)
+
+        self.label_data_Inscricao = Label(self.frameTelaADD_Inscricao, text="Data", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_data_Inscricao.place(relx=0.2, rely=0.265, relwidth=0.1, relheight=0.05)
+
+        self.data_Inscricao_entry = Entry(self.frameTelaADD_Inscricao, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.data_Inscricao_entry.place(relx=0.3, rely=0.265, relwidth=0.4, relheight=0.05)
+
+        self.bt_Salvar = Button(self.frameTelaADD_Inscricao, image=self.img_Salvar, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0, command=self.add_inscricao)
+        self.bt_Salvar.place(relx=0.37, rely=0.87, relwidth=0.25, relheight=0.13)
+
+    def telaEDT_Inscricao(self):
+        self.frameTelaEDT_Inscricao = Frame(self.root, bg=self.corFundo)
+        self.frameTelaEDT_Inscricao.place(relheight=1, relwidth=1)
+        # --------------------------------------------------------------------------------------------------------------------------------------------
+        # botoes superior
+        self.bt_Home = Button(self.frameTelaEDT_Inscricao, image=self.img_Home, bg=self.corFundo,
+                          activebackground=self.corFundo, highlightthickness=0, border=0,command=self.bt_frameEDT_Inscricao_Home)
+        self.bt_Home.place(relx=0, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Sol = Button(self.frameTelaEDT_Inscricao, image=self.img_Sol, bg=self.corFundo, activebackground=self.corFundo,
+                            highlightthickness=0, border=0, command=self.bt_frameEDT_Inscricao_sol)
+        self.bt_Sol.place(relx=0.73, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Avatar = Button(self.frameTelaEDT_Inscricao, image=self.img_avatar, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0)
+        self.bt_Avatar.place(relx=0.82, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.bt_Sair = Button(self.frameTelaEDT_Inscricao, image=self.img_log_out, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0,
+                            command=self.bt_frameEDT_Inscricao_sair)
+        self.bt_Sair.place(relx=0.91, rely=0, relwidth=0.09, relheight=0.2)
+
+        self.label_EdtInscricao = Label(self.frameTelaEDT_Inscricao, text="Editar Inscricao", font=('arial', 38, 'bold'),
+                                    fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_EdtInscricao.place(relx=0.24, rely=0.02, relwidth=0.5, relheight=0.06)
+
+        self.label_morador_cpf_Inscricao = Label(self.frameTelaEDT_Inscricao, text="Morador CPF", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_morador_cpf_Inscricao.place(relx=0.15, rely=0.1, relwidth=0.15, relheight=0.05)
+
+        self.morador_cpf_Inscricao_entry = Entry(self.frameTelaEDT_Inscricao, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.morador_cpf_Inscricao_entry.place(relx=0.3, rely=0.1, relwidth=0.4, relheight=0.05)
+
+        self.label_aula_codigo_Inscricao = Label(self.frameTelaEDT_Inscricao, text="Aula Codigo", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_aula_codigo_Inscricao.place(relx=0.15, rely=0.155, relwidth=0.15, relheight=0.05)
+
+        self.aula_codigo_Inscricao_entry = Entry(self.frameTelaEDT_Inscricao, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.aula_codigo_Inscricao_entry.place(relx=0.3, rely=0.155, relwidth=0.4, relheight=0.05)
+
+        self.label_status_Inscricao = Label(self.frameTelaEDT_Inscricao, text="Status", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_status_Inscricao.place(relx=0.15, rely=0.21, relwidth=0.15, relheight=0.05)
+
+        self.status_Inscricao_entry = Entry(self.frameTelaEDT_Inscricao, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.status_Inscricao_entry.place(relx=0.3, rely=0.21, relwidth=0.4, relheight=0.05)
+
+        self.label_data_Inscricao = Label(self.frameTelaEDT_Inscricao, text="Data", font=self.fonte_label_add_edt, anchor='e',
+                                        fg=self.cor_texto_titulo, bg=self.corFundo)
+        self.label_data_Inscricao.place(relx=0.2, rely=0.265, relwidth=0.1, relheight=0.05)
+
+        self.data_Inscricao_entry = Entry(self.frameTelaEDT_Inscricao, font=self.fonte_label_entry, fg=self.cor_texto_pesquisa)
+        self.data_Inscricao_entry.place(relx=0.3, rely=0.265, relwidth=0.4, relheight=0.05)
+
+        self.bt_Salvar = Button(self.frameTelaEDT_Inscricao, image=self.img_Salvar, bg=self.corFundo,
+                            activebackground=self.corFundo, highlightthickness=0, border=0, command=self.altera_inscricao)
+        self.bt_Salvar.place(relx=0.37, rely=0.87, relwidth=0.25, relheight=0.13)
+#
       
-
-   
-
-
-
 
 
 Telas()
